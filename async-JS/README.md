@@ -1,7 +1,31 @@
 # Promise
 
+## callbacks intro
+
 - we often have to deal with `tasks that rely on other tasks`
-- eg. we want to `get an image`, `compress it`, `apply a filter`, and `save it` 📸
+
+```js
+function loadScript(src, callback) {
+  let script = document.createElement("script");
+  script.src = src;
+  script.onload = () => callback(script);
+  document.head.append(script);
+}
+
+loadScript(
+  "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js",
+  (script) => {
+    alert(`Cool, the script ${script.src} is loaded`);
+    alert(_); // _ is a function declared in the loaded script
+  }
+);
+```
+
+- That’s the idea: the second argument is a `function` (usually anonymous) that `runs when the action is completed`
+
+### Callback in callback
+
+- another eg. we want to `get an image`, `compress it`, `apply a filter`, and `save it` 📸
 - In the end, we'll end up with something like this:
 
 ![callback hell](./images/promises/callback-hell.png)
@@ -97,6 +121,171 @@ Promise {<rejected>}
 - for image example,
 
 ![then-chain](./images/promises/promise-image-example-then-chain.png)
+
+## Promise API
+
+- There are `6 static methods` in the Promise class
+
+### 1. `Promise.all`
+
+- used when we want `many promises to execute in parallel` and `wait until all of them are ready`
+
+```js
+let urls = [
+  "https://api.github.com/users/iliakan",
+  "https://api.github.com/users/remy",
+  "https://api.github.com/users/jeresig",
+];
+
+// map every url to the promise of the fetch
+let requests = urls.map((url) => fetch(url));
+
+// Promise.all waits until all jobs are resolved
+Promise.all(requests).then((responses) =>
+  responses.forEach((response) => alert(`${response.url}: ${response.status}`))
+);
+```
+
+#### **Scenarios**
+
+- Scenario 1: `All passed-in Promises get fulfilled`
+  ![Promise.all](./images/promises/methods/Promise.all-1.gif)
+- Scenario 2: ⚡️ `One or more of the passed-in Promise(s) rejects`
+  ![Promise.all](./images/promises/methods/Promise.all-2.gif)
+  - In case of an `error`, other `promises are ignored`
+  ```js
+  Promise.all([
+    new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+    new Promise((resolve, reject) =>
+      setTimeout(() => reject(new Error("Whoops!")), 2000)
+    ),
+    new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+  ]).catch(alert); // Error: Whoops!
+  ```
+- Scenario 3: ⚡️ `All passed-in Promises get rejected`
+  ![Promise.all](./images/promises/methods/Promise.all-3.gif)
+- Scenario 4: `Passing an Empty iterable`
+  ![Promise.all](./images/promises/methods/Promise.all-4.gif)
+
+### 2. `Promise.allSettled`
+
+- `Promise.all` rejects as a whole if any promise rejects. when we need `all results successful` to proceed:
+- `Promise.allSettled` just waits for `all promises to settle`, `regardless of the result`. The resulting array has:
+
+  - {status:"fulfilled", value:result} for successful responses,
+  - {status:"rejected", reason:error} for errors.
+
+```js
+let urls = [
+  "https://api.github.com/users/iliakan",
+  "https://api.github.com/users/remy",
+  "https://no-such-url",
+];
+
+Promise.allSettled(urls.map((url) => fetch(url))).then((results) => {
+  // (*)
+  results.forEach((result, num) => {
+    if (result.status == "fulfilled") {
+      alert(`${urls[num]}: ${result.value.status}`);
+    }
+    if (result.status == "rejected") {
+      alert(`${urls[num]}: ${result.reason}`);
+    }
+  });
+});
+```
+
+**_output_**
+
+```sh
+[
+  {status: 'fulfilled', value: ...response...},
+  {status: 'fulfilled', value: ...response...},
+  {status: 'rejected', reason: ...error object...}
+]
+```
+
+#### **Scenarios**
+
+Scenario 1: `All passed-in Promises get fulfilled`
+![Promise.allSettled](./images/promises/methods/Promise.allSettled-1.gif)
+Scenario 2: `One or more of the passed-in Promise(s) rejects`
+![Promise.allSettled](./images/promises/methods/Promise.allSettled-2.gif)
+Scenario 3: `All passed-in Promises get rejected`
+![Promise.allSettled](./images/promises/methods/Promise.allSettled-3.gif)
+Scenario 4: `Passing an Empty iterable`
+![Promise.allSettled](./images/promises/methods/Promise.allSettled-4.gif)
+
+### 3. `Promise.race`
+
+- Similar to `Promise.all`, but waits only for the first `settled promise` and gets its result (or error).
+
+```js
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Whoops!")), 2000)
+  ),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+]).then(alert); // 1
+```
+
+- The first promise here was `fastest`, so it became the `result`
+- After the first settled promise `wins the race`, all further `results/errors are ignored`.
+
+#### **Scenarios**
+
+Scenario 1: ⚡️ `All passed-in Promises get fulfilled`
+![Promise.race](./images/promises/methods/Promise.race-1.gif)
+Scenario 2: ⚡️ `One or more of the passed-in Promise(s) rejects`
+![Promise.race](./images/promises/methods/Promise.race-2.gif)
+Scenario 3: ⚡️ `All passed-in Promises get rejected`
+![Promise.race](./images/promises/methods/Promise.race-3.gif)
+Scenario 4: `Passing an Empty iterable`
+![Promise.race](./images/promises/methods/Promise.race-4.gif)
+
+### 4. `Promise.any`
+
+- similar to promise.race, waits only for the first `fulfilled promise`
+- If `all of the given promises are rejected`, then the returned promise is rejected with `AggregateError` – a special error object that stores all promise errors in its errors property.
+
+```js
+Promise.any([
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Ouch!")), 1000)
+  ),
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Error!")), 2000)
+  ),
+]).catch((error) => {
+  console.log(error.constructor.name); // AggregateError
+  console.log(error.errors[0]); // Error: Ouch!
+  console.log(error.errors[1]); // Error: Error!
+});
+```
+
+#### **Scenarios**
+
+Scenario 1: ⚡️ `All passed-in Promises get fulfilled`
+![Promise.any](./images/promises/methods/Promise.any-1.gif)
+Scenario 2: ⚡️ `One or more of the passed-in Promise(s) rejects`
+![Promise.any](./images/promises/methods/Promise.any-2.gif)
+Scenario 3: `All passed-in Promises get rejected`
+![Promise.any](./images/promises/methods/Promise.any-3.gif)
+Scenario 4: `Passing an Empty iterable`
+![Promise.any](./images/promises/methods/Promise.any-4.gif)
+
+### 5. `Promise.resolve`
+
+- Promise.resolve(value) – makes a resolved promise with the given value.
+
+![Promise.resolve](./images/promises/methods/Promise.resolve-1.gif)
+
+### 6. `Promise.reject`
+
+- Promise.reject(error) – makes a rejected promise with the given error.
+
+![Promise.reject](./images/promises/methods/Promise.reject-1.gif)
 
 # Event Loop
 

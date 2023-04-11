@@ -1,11 +1,11 @@
 # Functions
 
-- A function is a reusable block of code or programming statements designed
+- A function is a `reusable block` of code or programming statements designed
 - Function makes code:
 
-  - clean and easy to read
-  - reusable
-  - easy to test
+  - `clean and easy to read`
+  - `reusable`
+  - `easy to test`
 
 - A function can be declared or created in couple of ways:
 
@@ -16,7 +16,8 @@
 
 ### Function Declaration
 
-Let us see how to declare a function and how to call a function.
+- If the function is declared as a `separate statement in the main code flow`, that’s called a `Function Declaration`
+- Function Declarations are `processed before the code block is executed`. They are visible everywhere in the block.(`Hoisted`)
 
 ```js
 //declaring a function without a parameter
@@ -26,27 +27,24 @@ function functionName() {
 functionName(); // calling function by its name and with parentheses
 ```
 
-### Function without a parameter and return
+### Parameters
 
-- Function can be declared without a parameter.
-
-**Example:**
+- We can pass arbitrary data to functions using parameters.
 
 ```js
-// function without parameter,  a function which make a number square
-function square() {
-  let num = 2;
-  let sq = num * num;
-  console.log(sq);
+function showMessage(from, text) {
+  // parameters: from, text
+  alert(from + ": " + text);
 }
 
-square(); // 4
+showMessage("Ann", "Hello!"); // Ann: Hello! (*)
+showMessage("Ann", "What's up?"); // Ann: What's up? (**)
 ```
 
 ### Function returning value
 
-- Function can also return values
-- if a function does not return values the value of the function is undefined
+- Function can also `return values`
+- if a function `does not return values` the value of the function is `undefined`
 
 ```js
 function printFullName() {
@@ -59,33 +57,14 @@ function printFullName() {
 console.log(printFullName()); // Asabeneh Yetayeh
 ```
 
-### Function with a parameter
-
-- In a function we can pass different data types(number, string, boolean, object, function) as a parameter.
-
-```js
-// function with one parameter
-function functionName(parm1) {
-  //code goes her
-}
-functionName(parm1); // during calling or invoking one argument needed
-
-function areaOfCircle(r) {
-  let area = Math.PI * r * r;
-  return area;
-}
-
-console.log(areaOfCircle(10)); // should be called with one argument
-```
-
 ### Function with unlimited number of parameters
 
-- Sometimes we do not know how many arguments the user going to pass.
-- The way we do it has a significant difference between a function declaration(regular function) and arrow function
+- Sometimes `we do not know how many arguments` the user going to pass.
+- The way we do it has a significant `difference` between a function `declaration`(regular function) and `arrow` function
 
 ### Unlimited number of parameters in regular function
 
-- A function declaration provides a function scoped arguments array like object.
+- A function declaration provides a function scoped `arguments array like object`.
 
 ```js
 // Let us access the arguments object
@@ -152,7 +131,7 @@ console.log(sumAllNums(15, 20, 30, 25, 10, 33, 40))  // 173
 
 ### Anonymous Function
 
-- Anonymous function or without name
+- Anonymous function or `without name`
 
 ```js
 const anonymousFun = function () {
@@ -162,10 +141,11 @@ const anonymousFun = function () {
 };
 ```
 
-### Expression Function
+### Function expression
 
-- Expression functions are anonymous functions.
-- After we create a function without a name and we assign it to a variable.
+- If the function is created as a part of an `expression`, it’s called a `Function Expression`
+- Function Expressions are `created when the execution flow reaches them`.
+- After we create a `function without a name` and we `assign it to a variable`.
 - To return a value from the function we should call the variable. Look at the example below.
 
 ```js
@@ -177,26 +157,9 @@ const square = function (n) {
 console.log(square(2)); // -> 4
 ```
 
-### Self Invoking Functions ( Immediately Invoked Function Expression - IIFE )
-
-- are anonymous functions which do not need to be called to return a value.
-- it called Immediately
-
-```js
-(function (n) {
-  console.log(n * n);
-})(2); // 4, but instead of just printing if we want to return and store the data, we do as shown below
-
-let squaredNum = (function (n) {
-  return n * n;
-})(10);
-
-console.log(squaredNum);
-```
-
 ### Arrow Function
 
-- Arrow function uses arrow instead of the keyword _function_ to declare a function
+- Arrow function uses `arrow` instead of the keyword _`function`_ to declare a function
 
 ```js
 // This is how we write normal or declaration function
@@ -215,14 +178,6 @@ console.log(square(2)); // -> 4
 
 // if we have only one line in the code block, it can be written as follows, explicit return
 const square = (n) => n * n; // -> 4
-```
-
-- The above function has only the return statement, therefore, we can explicitly return it as follows.
-
-```js
-const printFullName = (firstName, lastName) => `${firstName} ${lastName}`;
-
-console.log(printFullName("Asabeneh", "Yetayeh"));
 ```
 
 ### Function with default parameters
@@ -249,4 +204,21 @@ function greetings(name = "Peter") {
 
 console.log(greetings());
 console.log(greetings("Asabeneh"));
+```
+
+### Self Invoking Functions ( Immediately Invoked Function Expression - IIFE )
+
+- are `anonymous functions` which do not need to be called to return a value.
+- it called `Immediately`
+
+```js
+(function (n) {
+  console.log(n * n);
+})(2); // 4, but instead of just printing if we want to return and store the data, we do as shown below
+
+let squaredNum = (function (n) {
+  return n * n;
+})(10);
+
+console.log(squaredNum);
 ```
