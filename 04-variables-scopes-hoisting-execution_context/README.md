@@ -232,6 +232,18 @@ function getPersonInfo() {
 console.log(getPersonInfo());
 ```
 
+**Example**
+
+```js
+let a = 5;
+let change = (a) => {
+  a++;
+  console.log(a); // 6  as trated as new variable - same for var also
+};
+change(a);
+console.log(a); // 5
+```
+
 - First, `memory space` is set up for the different contexts
 - We have the default `global context` (window in a browser, global in Node)
 - and a `local context for the getPersonInfo function` which has been invoked

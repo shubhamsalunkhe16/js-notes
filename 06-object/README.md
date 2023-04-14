@@ -568,6 +568,174 @@ userAdmin.admin?.(); // I am admin
 userGuest.admin?.(); // nothing happens (no such method)
 ```
 
+## Getters and setters
+
+- In an object literal they are denoted by `get` and `set`:
+
+```js
+let user = {
+  name: "John",
+  surname: "Smith",
+
+  get fullName() {
+    return `${this.name} ${this.surname}`;
+  },
+};
+
+alert(user.fullName); // John Smith
+
+// If we attempt to assign user.fullName=, there will be an error:
+user.fullName = "Test"; // Error (property has only a getter)
+```
+
+- fix it by adding a setter for user.fullName:
+
+```js
+let user = {
+  name: "John",
+  surname: "Smith",
+
+  get fullName() {
+    return `${this.name} ${this.surname}`;
+  },
+
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
+  },
+};
+
+// set fullName is executed with the given value.
+user.fullName = "Alice Cooper";
+
+alert(user.name); // Alice
+alert(user.surname); // Cooper
+```
+
+## Property flags and descriptors
+
+### Property flags
+
+- Object properties, besides a value, have three special attributes (so-called “flags”):
+
+  - `writable` – if true, the value can be changed, otherwise it’s read-only.
+  - `enumerable` – if true, then listed in loops, otherwise not listed.
+  - `configurable` – if true, the property can be deleted and these attributes can be modified, otherwise not.
+
+- method `Object.getOwnPropertyDescriptor` allows to query the full information about a property.
+
+```js
+let user = {
+  name: "John",
+};
+
+let descriptor = Object.getOwnPropertyDescriptor(user, "name");
+
+alert(JSON.stringify(descriptor, null, 2));
+/* property descriptor:
+{
+  "value": "John",
+  "writable": true,
+  "enumerable": true,
+  "configurable": true
+}
+*/
+```
+
+- To change the flags, we can use Object.defineProperty.
+
+**Non-writable**
+
+```js
+let user = {
+  name: "John",
+};
+
+Object.defineProperty(user, "name", {
+  writable: false,
+});
+
+user.name = "Pete"; // Error: Cannot assign to read only property 'name'
+```
+
+**Non-enumerable**
+
+```js
+let user = {
+  name: "John",
+  toString() {
+    return this.name;
+  },
+};
+
+Object.defineProperty(user, "toString", {
+  enumerable: false,
+});
+
+// Now our toString disappears:
+for (let key in user) alert(key); // name
+```
+
+**Non-configurable**
+
+- A non-configurable property `can’t be deleted`, its attributes `can’t be modified`.
+
+```js
+let descriptor = Object.getOwnPropertyDescriptor(Math, "PI");
+
+alert(JSON.stringify(descriptor, null, 2));
+/*
+{
+  "value": 3.141592653589793,
+  "writable": false,
+  "enumerable": false,
+  "configurable": false
+}
+*/
+Math.PI = 3; // Error, because it has writable: false
+// delete Math.PI won't work either
+
+// Error, because of configurable: false
+Object.defineProperty(Math, "PI", { writable: true });
+```
+
+- Object.defineProperties(obj, descriptors) that allows to define many properties at once
+
+```js
+Object.defineProperties(user, {
+  name: { value: "John", writable: false },
+  surname: { value: "Smith", writable: false },
+  // ...
+});
+```
+
+### Sealing an object globally
+
+#### `Object.preventExtensions(obj)`
+
+Forbids the `addition of new properties` to the object.
+
+#### `Object.seal(obj)`
+
+Forbids `adding/removing` of properties. Sets `configurable: false` for all existing properties.
+
+#### `Object.freeze(obj)`
+
+Forbids `adding/removing/changing` of properties. Sets `configurable: false, writable: false` for all existing properties.
+
+### _And also there are tests for them:_
+
+#### `Object.isExtensible(obj)`
+
+Returns `false` if `adding properties is forbidden`, otherwise true.
+
+#### `Object.isSealed(obj)`
+
+Returns `true` if `adding/removing properties is forbidden`, and all existing properties have configurable: false.
+
+#### `Object.isFrozen(obj)`
+
+Returns `true` if `adding/removing/changing properties is forbidden`, and all current properties are configurable: false, writable: false.
+
 # Map
 
 - `a collection of keyed values`.
