@@ -366,6 +366,17 @@ Object.assign(dest, ...sources);
 - The first argument dest is a `target object`
 - Further arguments is a `list of source objects`
 
+3. spread operator
+
+```js
+let user = {
+  name: "John",
+  age: 30,
+};
+
+let userClone = { ...user };
+```
+
 #### merge objects
 
 ```js
@@ -394,7 +405,7 @@ alert(clone.name); // John
 alert(clone.age); // 30
 ```
 
-### Nested cloning
+### Nested cloning (Deep Cloning)
 
 ```js
 let user = {
@@ -436,6 +447,20 @@ alert(clone.sizes.width); // 50, not related
 ```
 
 - use `Object.assign` for the so-called `shallow copy` (nested objects are copied by reference) or a `deep cloning` function `structuredClone` or use a `custom cloning implementation`
+
+- **NOTE** : `JSON.stringify and JSON.parse` : this method utilizes the fact that every JSON can be converted to a string value (exception of methods/functions)
+
+```js
+let addressObject = { city: "delhi", state: "delhi" };
+
+let person = {
+  name: "John",
+  address: addressObject,
+};
+
+let str = JSON.stringify(person);
+let jsonObject = JSON.parse(str);
+```
 
 ### Constructor function
 
@@ -821,3 +846,5 @@ for (let entry of recipeMap) {
 ```
 
 - The insertion order is used
+
+**[Interview questions](https://roadsidecoder.hashnode.dev/javascript-interview-questions-objects-output-based-destructuring-object)**
