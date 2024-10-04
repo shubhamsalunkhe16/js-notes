@@ -12,12 +12,6 @@
   - `"Chakra" - in IE`
   - `"JavaScriptCore", "Nitro" and "SquirrelFish" - in Safari`, etc
 
-# Why is it called JavaScript?
-
-- It initially had another name: `LiveScript`
-
-* But `Java` was very popular at that time, so it was decided that positioning a new language as a `younger brother of Java` would help
-
 # How do engines (translator) work?
 
 ```
@@ -46,93 +40,38 @@ parse(read)  =>  compiles(translate)  =>  run
   <script src="path/to/script.js"></script>
   ```
 
-# Async Vs Defer In Javascript
+# Async Vs Defer
 
-## Normal `<script>` tag
+- `async` attribute : script will be **fetched in parallel to html parsing** and **executed as soon as it is available** (potentially before parsing completes).
 
-```html
-<html>
-<head> ... </head>
-<body>
-    ...
-    <script src="script.js">
-    ....
-</body>
-</html>
-```
+- `defer` attribute : script will be **fetched in parallel** and **executed when the page has finished parsing**
 
-- JS `blocks` the parsing of HTML
-- `fetches` the script from the network
-- `Executes` the script
-- HTML parsing is started only after the `script is fully executed`
-
-![asyncVSdefer](./images/async-defer/async-defer-1.png)
-
-## The async Attribute
-
-```html
-<script async src="script.js">
-```
-
-- `HTML parsing` and `script fetched` from the network goes asynchronously
-
-- As soon as scripts are `fetched`, HTML parsing `stops` & scripts start `executing`
-
-- Once the scripts are executed, the HTML parsing continues like regular
-
-![asyncVSdefer](./images/async-defer/async-defer-2.png)
-
-## The defer Attribute
-
-```html
-<script defer src="script.js">
-```
-
-- HTML parsing goes on and scripts are fetched in `parallel`
-
-- Scripts are only `executed` once the HTML `parsing is complete`
-
-![asyncVSdefer](./images/async-defer/async-defer-3.png)
-
-## Which one to use?
-
-- `async` attribute does not guarantee the order of execution of scripts but `defer` does
-
-- So for this, we can use an alternative solution which is to use the `<script>` tag just before the `<body>` tag of the HTML file.
+![asyncVSdefer](./images/async_and_defer.png)
 
 # What is “use strict” ?
 
 - always at the `top` of your scripts
+- `purpose` is to indicate that the code should be `executed in "strict mode"`
+- makes it `easier to write "secure" JavaScript`
+- changes previously accepted `"bad syntax" into real errors`
 
-- with Strict mode you cannot use any variable before initializing it.
-
-```js
-// note: no "use strict" in this example
-
-num = 5; // the variable "num" is created if it didn't exist
-
-alert(num); // 5
-```
+- eg.
 
 ```js
+// Using a variable, without declaring it, is not allowed:
 "use strict";
-
 num = 5; // error: num is not defined
+
+// Deleting a variable (or object) is not allowed.
+let x = 3.14;
+delete x; // This will cause an error
+
+function x(p1, p2) {}
+delete x; // This will cause an error
+
+// Duplicating a parameter name is not allowed:
+function x(p1, p1) {} // This will cause an error
 ```
-
-- Declared inside a `function`, it has `local scope` (only the code inside the function is in strict mode)
-
-```js
-x = 3.14; // This will not cause an error.
-myFunction();
-
-function myFunction() {
-  "use strict";
-  y = 3.14; // This will cause an error
-}
-```
-
-- `Modern JS` supports “classes” and “modules” – advanced language structures, that `enable use strict automatically`. So we don’t need to add the "use strict" directive, if we use them.
 
 # Alert, Prompt and Confirm
 

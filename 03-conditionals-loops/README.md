@@ -1,8 +1,8 @@
 # Falsy & Truthy values
 
-- A falsy value is a value that is considered `false` when encountered in a Boolean context
-
 - all values are `truthy` - `except falsy` values
+- A falsy value is a value that is considered `false` when encountered in a Boolean context
+- eg.
 
 | Value      | Description                                                                                           |
 | ---------- | ----------------------------------------------------------------------------------------------------- |
@@ -38,8 +38,8 @@ alert(false == 0); // true
 
 ## Strict equality
 
-- A strict equality operator `===` checks the equality without type conversion
-- checks value and data type both
+- A strict equality operator `===` checks the equality `without type conversion`
+- checks `value` and `data type` both
 
 ```js
 alert(0 == false); // true
@@ -71,7 +71,7 @@ alert(false || false); // false
 ```js
 alert(1 || 0); // 1 (1 is truthy)
 alert(null || 1); // 1 (1 is the first truthy value)
-alert(null || 0 || 1); // 1 (the first truthy value)
+alert(null || 1 || 0); // 1 (the first truthy value)
 ```
 
 - if `all falsy`, returns the `last value`
@@ -347,7 +347,7 @@ for (let i of list) {
 ```js
 for (let i = 1; i <= 10; i++) {
   if (i === 4) {
-    break;
+    break; // will break loop
   }
   console.log(i); //1,2,3
 }
@@ -358,7 +358,7 @@ for (let i = 1; i <= 10; i++) {
 ```js
 for (let i = 1; i <= 10; i++) {
   if (i === 4) {
-    continue;
+    continue; // will skip this iteration
   }
   console.log(i); //1,2,3,5,6,7,8,9,10
 }

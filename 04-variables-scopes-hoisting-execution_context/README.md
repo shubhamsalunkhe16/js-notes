@@ -111,7 +111,7 @@ function letsLearnScope() {
     let b = 100;
     console.log(a, b); // Python 100
   }
-  console.log(a, b);
+  console.log(a, b); // JavaScript 10, accessible
 }
 letsLearnScope();
 console.log(a, b); // JavaScript 10, accessible
@@ -191,7 +191,7 @@ function func() {
   if (true) {
     let a = "Virat"; // Legal Shadowing
     var b = "Kohli"; // Illegal Shadowing
-    console.log(a); // It will print 'GeeksforGeeks'
+    console.log(a); // It will print 'Virat'
     console.log(b); // It will print error
   }
 }
@@ -382,141 +382,144 @@ let x = 1;
 
 # scope chain
 
+- it is the `hierarchy of scopes` that determines `how variables are accessed in nested functions`.
+- When a variable is used `inside a function`, JavaScript first looks for it in the `current scope`, and if it’s `not found`, it moves up the scope chain to the `outer scope`, and `so on`, until it reaches the `global scope`.
+- If the variable `isn't found anywhere`, it results in a `reference error`.
+
+![ScopeChain](./images/scope/scope-3.gif)
+![ScopeChain](./images/scope/scope-5.gif)
+
+- Real-Life Example: `Restaurant Kitchen` (Scope Chain)
+
+- If the chef needs an ingredient, they:
+
+1. First check their personal station.
+2. If it’s not there, they check the section pantry.
+3. If it’s still not found, they go to the global pantry.
+
+- This search process represents the scope chain.
+
 ```js
-const name = "Lydia";
-const age = 21;
-const city = "San Francisco";
+// Global Pantry (Global Scope)
+let globalIngredient = "Flour";
 
-function getPersonInfo() {
-  const name = "Sarah";
-  const age = 22;
+function kitchenSection() {
+  // Section Pantry (Function Scope)
+  let sectionIngredient = "Cheese";
 
-  return `${name} is ${age} and lives in ${city}`;
+  function chefStation() {
+    // Chef's Personal Station (Inner Function Scope)
+    let stationIngredient = "Spices";
+
+    // Chef checks their personal station first
+    console.log(stationIngredient); // "Spices"
+
+    // If not found, the chef checks the section pantry
+    console.log(sectionIngredient); // "Cheese"
+
+    // If still not found, the chef checks the global pantry
+    console.log(globalIngredient); // "Flour"
+  }
+
+  chefStation();
 }
 
-console.log(getPersonInfo());
+kitchenSection();
 ```
-
-- First, `memory space` is set up for the different contexts
-- We have the default `global context` (window in a browser, global in Node)
-- and a `local context for the getPersonInfo function` which has been invoked
-- Each context also has a `scope chain`
-
-![scope](./images/scope/scope-1.png)
-![scope](./images/scope/scope-2.gif)
-
-- In order to find the value for city the engine `goes to outer scopes`
-- You can go to `outer scopes`, but `not to more inner`
-
-![scope](./images/scope/scope-3.gif)
-![scope](./images/scope/scope-4.png)
-
-- if variable not found in any scope, it throws `ReferenceError`
-
-![scope](./images/scope/scope-5.gif)
 
 # Lexical Scope
 
-- Lexical scope is the `definition area of an expression`
+- lexical scope means that the `visibility of variables` is determined by `where they are written in the code`, `not where or how they are executed`.
 
 - In other words, an item's lexical scope is the `place in which the item got created`
 
-- A Lexical scope in JavaScript means that a `variable defined outside a function can be accessible inside another function defined after the variable declaration`.
+- `Inner functions` can access variables from their `own scope` and any `outer scope`, but `not vice versa`
 
-- But the opposite is not true; the `variables defined inside a function will not be accessible outside that function`.
+- Real-Life Example: `Office Building (Lexical Scope)`
+
+- Imagine an office building with multiple floors:
+
+1. `Each floor represents a scope`
+2. Employees on each floor can access files that are `located on their floor` (local scope).
+3. Employees can also access files on the `floors above them` (outer scope), but `not on the floors below them`
 
 ```js
-let age = 18;
-function foo() {
-  var name = "Roadside Coder"; // name is a local variable created by foo
-  function displayName() {
-    //<--- A Closure // displayName() is the inner function
-    alert(name, age); //'Roadside Coder,18' variable used which is declared in the parent function and global scope
+// Top floor (Global Scope)
+let topFloorDocument = "Global Document";
+
+function middleFloor() {
+  // Middle floor (Function Scope)
+  let middleFloorDocument = "Middle Floor Document";
+
+  function basement() {
+    // Basement (Inner Function Scope)
+    let basementDocument = "Basement Document";
+
+    // Employees in the basement can access all documents
+    console.log(topFloorDocument); // Accessible
+    console.log(middleFloorDocument); // Accessible
+    console.log(basementDocument); // Accessible
   }
-  displayName();
+
+  // Employees on the middle floor can access their own and top floor documents
+  console.log(topFloorDocument); // Accessible
+  console.log(middleFloorDocument); // Accessible
+  // console.log(basementDocument); // Error: Not accessible from middle floor
+
+  basement();
 }
-foo();
+
+middleFloor();
 ```
 
 ## Closures
 
-- we `can create nested functions` in js
+- A closure in JavaScript occurs when a function is able to `remember the variables` from its `lexical scope`, even when that `function is executed outside of that scope`.
+- In other words, a closure allows a function to `access variables from an outer function` even after the `outer function has finished executing`.
+- Example: `Bank Account Using Closures`
 
 ```js
-function createUser(name) {
-  let greeting = "Hi ";
-  function greet() {
-    return greeting + name + " is Created";
-  }
-  return greet();
-}
+function createBankAccount(initialBalance) {
+  // The `balance` is private
+  let balance = initialBalance;
 
-createUser("john"); // Hi john is created;
-```
+  return {
+    // Function to deposit money into the account
+    deposit: function (amount) {
+      if (amount > 0) {
+        balance += amount;
+        console.log(`Deposited: $${amount}. New balance: $${balance}`);
+      } else {
+        console.log("Invalid deposit amount");
+      }
+    },
 
-- Now more useful work is `if we can return the greet function` itself.
+    // Function to withdraw money from the account
+    withdraw: function (amount) {
+      if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        console.log(`Withdrew: $${amount}. New balance: $${balance}`);
+      } else {
+        console.log("Insufficient funds or invalid amount");
+      }
+    },
 
-```js
-function createUser(name) {
-  let greeting = "Hi ";
-  function greet() {
-    return greeting + name + " is Created";
-  }
-  return greet; // returned just definition of function
-}
-
-let welcomeJohn = createUser("john");
-welcomeJohn(); // // Hi john is created;
-```
-
-- This is `Closure`
-- welcomeJohn function definition has `access to outer params ( name ) which came for createUser function`
-- also `any other variables` declared inside `createUser` will also be` accessible to this welcomeJohn`
-
-- `without closure`
-
-```js
-let count = 0;
-function initCounter() {
-  console.log(++count);
-}
-
-initCounter(); //1
-initCounter(); //2
-count = 5; // not protected - can be changed outside the function
-initCounter(); //6
-initCounter(); //7
-
-// for new counter => new function
-let count1 = 0;
-function initCounter1() {
-  console.log(++count1);
-}
-```
-
-- `with closure`
-
-```js
-function initCounter() {
-  let count = 0;
-  return function () {
-    count++;
+    // Function to check the current balance
+    checkBalance: function () {
+      console.log(`Current balance: $${balance}`);
+      return balance;
+    },
   };
 }
 
-let counter = initCounter();
-counter(); // 0
-counter(); // 1
+// Creating a new bank account with an initial balance of $1000
+const myAccount = createBankAccount(1000);
 
-let counter1 = initCounter();
-counter1(); // 0
-counter1(); // 1
+// Using the closure to interact with the bank account
+myAccount.deposit(500); // Deposits $500
+myAccount.withdraw(200); // Withdraws $200
+myAccount.checkBalance(); // Prints the current balance
 ```
-
-**NOTE** :
-
-- so whenever you have a function which wants to `preserve a value` over many calls - it's a time for closure
-- and `preserved a value` is `protected` also
 
 ### Real life example 1 (click counter)
 
@@ -568,8 +571,44 @@ let strAdder2 = initAddString('text2', 'text-output2');
 
 ## Currying
 
-- Currying is a function that takes `one argument at a time` and `returns a new function expecting the next argument`
-- It is a conversion of functions from callable as `f(a,b,c)into callable as f(a)(b)(c)`
+- Instead of taking all arguments at once, the function takes the `first argument`, `returns a new function` that takes the `second argument`, and so on, `until all arguments have been provided`
+- Real-Life Example: `Coffee Shop Order`
+
+Imagine you're at a `coffee shop ordering a customized drink`. Instead of giving all your preferences at once, the barista asks for your choices `step by step`.
+
+1. First, you choose the type of drink (e.g., latte, cappuccino).
+2. Next, you specify the size (e.g., small, medium, large).
+3. Finally, you choose any extra options (e.g., extra shot of espresso, syrup).
+
+At each step, the barista asks for more information and finalizes the order only after you've provided all the details.
+
+```js
+// Currying function for placing a coffee order
+function orderCoffee(drinkType) {
+  return function (size) {
+    return function (extra) {
+      return `Order placed: ${size} ${drinkType} with ${extra}`;
+    };
+  };
+}
+
+// Placing the order step by step
+const orderLatte = orderCoffee("Latte");
+const orderMediumLatte = orderLatte("Medium");
+const finalOrder = orderMediumLatte("an extra shot of espresso");
+// can be called by another way
+const anotherFinalOrder = orderCoffee("cappuccino")("Large")(
+  "an extra shot of espresso"
+);
+
+console.log(finalOrder); // Output: Order placed: Medium Latte with an extra shot of espresso
+console.log(anotherFinalOrder); // Output: Order placed: Large cappuccino with an extra shot of espresso
+```
+
+- Benefits of Currying:
+- `Reuse Functions`: You can reuse parts of the function. For example, you can create a partially applied function like `orderLatte` for all latte orders, without needing to specify the drink type every time.
+
+- `Customization`: Currying allows you to break down the `logic into smaller pieces`, making it easier to compose and customize function behavior.
 
 ```js
 function sum(a, b, c) {
@@ -597,7 +636,7 @@ console.log(add(1)(2)(3)); // 6
 ```js
 // Another Example of a curried function
 
-const multiply = (x, y) = x * y;
+const multiply = (x, y) => x * y;
 
 const curriedMultiply = x => y => x * y;
 
@@ -608,7 +647,7 @@ console.log(curriedMultiply(2)(3)); // 6
 
 
 // Partially applied functions are a common use of currying
-const timesTen = curriedHultiply(10);
+const timesTen = curriedMultiply(10);
 
 console.log(timesTen); // y => x * y
 console.log(timesTen(8)); // 80
