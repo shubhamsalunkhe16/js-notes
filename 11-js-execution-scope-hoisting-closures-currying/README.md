@@ -1,277 +1,3 @@
-# Variables
-
-- used to `store information` and use them later
-
-```js
-let message = "Hello";
-
-alert(message); // Hello
-```
-
-- `declare multiple variables` in one line
-  <br/>
-
-```js
-let user = "John",
-  age = 25,
-  message = "Hello";
-```
-
-## Variable naming
-
-- name must contain `only letters`, `digits`, or the symbols `$ and _`
-
-```js
-let userName;
-let test123;
-
-let $ = 1; // declared a variable with the name "$"
-let _ = 2; // and now a variable with the name "_"
-alert($ + _); // 3
-```
-
-- `first` character must `not be a digit`
-
-```js
-let 1a;
-```
-
-- hyphens `-` are `not allowed` in the name
-
-```js
-let my-name;
-```
-
-- `Case sensitive`
-
-```js
-// both variables are different
-let apple = "...";
-let APPLE = "...";
-```
-
-- `Non-Latin` letters are `allowed`, but `not recommended`
-
-```js
-let имя = "...";
-```
-
-- `can't use reserved words`
-
-```js
-let let = 5;
-let return = 5;
-```
-
-## `var` vs `let` vs `const`
-
-|                                           | var                                            | let                                            | const                                               |
-| ----------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | --------------------------------------------------- |
-| `Redeclaration`                           | YES                                            | NO                                             | NO                                                  |
-| `Reassignment`</br>(can change its value) | YES                                            | YES                                            | NO                                                  |
-| `Must be Assigned while declaration`      | NO<br/>var name;<br/>name = 'Shubham'; //valid | NO<br/>let name;<br/>name = 'Shubham'; //valid | YES<br/>const PI;<br/>PI = 3.14159265359; //invalid |
-| `Block Scope`                             | NO<br/>(functional scope)                      | YES                                            | YES                                                 |
-
-- If you re-declare with `var` only, it will not lose its value.
-
-```js
-var carName = "Volvo";
-var carName; // Volvo
-
------------------------
-
-let message = "This";
-let message = "That"; // SyntaxError: 'message' has already been declared
-```
-
-# scope
-
-- A variable can be declared at `different scope`
-- there are 4 kinds of scope in Javascript - `Block Scope`, `Global Scope`, `Function Scope`, `Module Scope`
-
-- Anything declared `without let, var or const` is scoped at `global level`
-
-```js
-//scope.js
-b = 10; // this is a global scope
-```
-
-## Global scope
-
-- A globally declared variable can be `accessed every where in the same file`
-
-```js
-//scope.js
-let a = "JavaScript"; // is a global scope
-let b = 10; // is a global scope
-function letsLearnScope() {
-  console.log(a, b); // JavaScript 10, accessible
-  if (true) {
-    let a = "Python";
-    let b = 100;
-    console.log(a, b); // Python 100
-  }
-  console.log(a, b); // JavaScript 10, accessible
-}
-letsLearnScope();
-console.log(a, b); // JavaScript 10, accessible
-```
-
-## Local scope
-
-- A variable declared as local can be accessed only in certain block code
-  1. `Block Scope`
-  2. `Function Scope`
-
-```js
-//scope.js
-let a = "JavaScript"; // is a global scope
-let b = 10; // is a global scope
-
-// Function scope
-function letsLearnScope() {
-  console.log(a, b); // JavaScript 10, accessible
-  let value = false;
-  // block scope
-  if (true) {
-    // we can access from the function and outside the function but
-    // variables declared inside the if will not be accessed outside the if block
-    let a = "Python";
-    let b = 20;
-    let c = 30;
-    let d = 40;
-    value = !value;
-    console.log(a, b, c, value); // Python 20 30 true
-  }
-  // we can not access c because c's scope is only the if block
-  console.log(a, b, value); // JavaScript 10 true
-}
-letsLearnScope();
-console.log(a, b); // JavaScript 10, accessible
-```
-
-## Module scope
-
-- In modern javascript, a `file can be considered as module`
-- defined variable can only be `accessed in that particular module`
-
-```js
-<script src="index.js" type="module"></script>;
-export { someVar, someFunc };
-import { someVar } from "./app.js";
-```
-
-## Shadowing
-
-### Variable Shadowing
-
-```js
-function func() {
-  let a = "John";
-
-  if (true) {
-    let a = "Wick"; // New value assigned => Variable Shadowing
-    console.log(a); // Wick
-  }
-
-  console.log(a); // John
-}
-func();
-```
-
-### Illegal Shadowing
-
-- if we try to shadow `let variable by var variable`, it is known as Illegal Shadowing
-
-```js
-function func() {
-  var a = "Rohit";
-  let b = "Sharma";
-
-  if (true) {
-    let a = "Virat"; // Legal Shadowing
-    var b = "Kohli"; // Illegal Shadowing
-    console.log(a); // It will print 'Virat'
-    console.log(b); // It will print error
-  }
-}
-func();
-```
-
-## understanding of scope
-
-- A variable declared with `var` only scoped to `function`
-- variable declared with `let` or `const` is `block scope`(function block, if block, loop block, etc)
-- Block in JavaScript is a code in between `two curly brackets` ({}).
-
-```js
-//scope.js
-function letsLearnScope() {
-  var gravity = 9.81;
-  console.log(gravity);
-}
-// console.log(gravity), Uncaught ReferenceError: gravity is not defined
-
-if (true) {
-  var gravity = 9.81;
-  console.log(gravity); // 9.81
-}
-console.log(gravity); // 9.81
-
-for (var i = 0; i < 3; i++) {
-  console.log(i); // 0, 1, 2
-}
-console.log(i); // 3
-```
-
-- When we use `let/const`, our variable is block scoped and it will not infect other parts of our code
-
-```js
-//scope.js
-function letsLearnScope() {
-  // you can use let or const, but gravity is constant I prefer to use const
-  const gravity = 9.81;
-  console.log(gravity);
-}
-// console.log(gravity), Uncaught ReferenceError: gravity is not defined
-
-if (true) {
-  const gravity = 9.81;
-  console.log(gravity); // 9.81
-}
-// console.log(gravity), Uncaught ReferenceError: gravity is not defined
-```
-
-**Example**
-
-```js
-let a = 5;
-let change = (a) => {
-  a++;
-  console.log(a); // 6  as trated as new variable - same for var also
-};
-change(a);
-console.log(a); // 5
-```
-
-```js
-for (let i = 0; i < 5; i++) {
-  setTimeout(() => console.log(i), 1000);
-} // prints 0,1,2,3,4
-
-for (var i = 0; i < 5; i++) {
-  setTimeout(() => console.log(i), 1000);
-} // prints 5,5,5,5,5
-```
-
-```js
-var x = 5;
-var fx = () => {
-  console.log(x); // undefined => if variable present in scope it will not go to its parent scope,will refer the current scope
-  var x = 2;
-};
-```
-
 # How JavaScript Works
 
 - Everything in JavaScript happens `inside an Execution Context`
@@ -348,7 +74,32 @@ a();
 
 # Hoisting
 
+- hoisting is a behavior where `variable and function declarations` are moved ("hoisted") to the `top of their containing scope` during the `compilation phase`, before the code is executed.
 - `Functions` and `variables` are stored in `memory` for an `execution context` before we execute our code. This is called `hoisting`.
+
+## Hoisting Behavior:
+
+1. Variables declared with `var are hoisted` but `initialized with undefined`.
+2. Variables declared with `let and const are hoisted` but `not initialized` (they exist in the "temporal dead zone" until their declaration is encountered).
+3. Function declarations are `hoisted along with their definitions`, meaning you can call the function before the actual declaration.
+
+```js
+console.log(orderDetails); // Output: undefined (because of hoisting)
+
+// console.log(paymentMethod); // Error: Cannot access 'paymentMethod' before initialization
+// TDZ prevents access until the declaration is encountered.
+
+// processOrder(); // This will work fine because of function hoisting
+
+var orderDetails = "Pizza, 2 sodas";
+let paymentMethod = "Credit Card";
+
+function processOrder() {
+  console.log("Processing order for:", orderDetails);
+}
+
+processOrder(); // Works fine because function declarations are hoisted
+```
 
 ![Hoisting](./images/hoisting/hoisting1.gif)
 ![Hoisting](./images/hoisting/hoisting2.gif)
@@ -357,28 +108,6 @@ a();
 ![Hoisting](./images/hoisting/hoisting5.gif)
 ![Hoisting](./images/hoisting/hoisting6.gif)
 ![Hoisting](./images/hoisting/hoisting7.gif)
-
-## let and const hoisting
-
-- Variables declared with let and const are `also hoisted` but, `unlike var, are not initialized with a default value`. An `exception` will be thrown in a case of let and const
-
-- A let or const variable is said to be in a `temporal dead zone (TDZ)` from the start of the block until code execution reaches the line where the variable is declared.
-
-```js
-{
-  // TDZ starts at beginning of scope
-  console.log(bar); // undefined
-  console.log(foo); // ReferenceError
-  var bar = 1;
-  let foo = 2; // End of TDZ (for foo)
-}
-
-let x = 1;
-{
-  console.log(x); // Reference error
-  let x = 2;
-}
-```
 
 # scope chain
 
@@ -472,7 +201,7 @@ function middleFloor() {
 middleFloor();
 ```
 
-## Closures
+# Closures
 
 - A closure in JavaScript occurs when a function is able to `remember the variables` from its `lexical scope`, even when that `function is executed outside of that scope`.
 - In other words, a closure allows a function to `access variables from an outer function` even after the `outer function has finished executing`.
@@ -569,7 +298,7 @@ let strAdder2 = initAddString('text2', 'text-output2');
 
 **[Interview questions](https://roadsidecoder.hashnode.dev/closures-javascript-interview-questions)**
 
-## Currying
+# Currying
 
 - Instead of taking all arguments at once, the function takes the `first argument`, `returns a new function` that takes the `second argument`, and so on, `until all arguments have been provided`
 - Real-Life Example: `Coffee Shop Order`
@@ -691,5 +420,3 @@ const total = (a, b, c) => a + b + c;
 const curriedTotal = curry(total);
 curriedTotal(10)(20)(30); //60
 ```
-
-**[Interview questions](https://roadsidecoder.hashnode.dev/javascript-interview-questions-currying-output-based-questions-partial-application-and-more)**

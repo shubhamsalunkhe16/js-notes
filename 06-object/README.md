@@ -847,4 +847,63 @@ for (let entry of recipeMap) {
 
 - The insertion order is used
 
-**[Interview questions](https://roadsidecoder.hashnode.dev/javascript-interview-questions-objects-output-based-destructuring-object)**
+# call,apply and bind
+
+- `call(), apply(), and bind()` are methods used to `control the value of this` inside a `function` and to invoke or attach methods `from one object to another`
+
+1. call()
+
+- `Invokes the function immediately` with `arguments passed individually`
+
+```js
+const person = {
+  name: "John",
+  greet: function (message) {
+    console.log(`${message}, I am ${this.name}.`);
+  },
+};
+
+const person2 = { name: "Jane" };
+
+// Calling greet for person2 using person’s greet method
+person.greet.call(person2, "Hello"); // Output: "Hello, I am Jane."
+```
+
+2. apply()
+
+- `Invokes the function immediately` but with `arguments passed as an array`.
+
+```js
+const person = {
+  name: "John",
+  greet: function (message1, message2) {
+    console.log(`${message1} ${message2}, I am ${this.name}.`);
+  },
+};
+
+const person2 = { name: "Jane" };
+
+// Calling greet for person2 using apply
+person.greet.apply(person2, ["Hi", "there"]); // Output: "Hi there, I am Jane."
+```
+
+3. bind()
+
+- `Does not invoke the function immediately`; instead, it `returns a new function with this permanently set to a specific object`
+
+```js
+const person = {
+  name: "John",
+  greet: function () {
+    console.log(`Hello, I am ${this.name}.`);
+  },
+};
+
+const person2 = { name: "Jane" };
+
+// Create a new function with 'this' bound to person2
+const greetJane = person.greet.bind(person2);
+
+// Call the new bound function later
+greetJane(); // Output: "Hello, I am Jane."
+```
