@@ -250,50 +250,108 @@ myAccount.withdraw(200); // Withdraws $200
 myAccount.checkBalance(); // Prints the current balance
 ```
 
-### Real life example 1 (click counter)
+### debounce example
 
 ```js
-function initCounter(id) {
-  let count = 0;
-  return function () {
-    count++;
-    document.getElementById(id).innerText = count;
+function debounce(fn, delay) {
+  let timeId;
+  return function (...args) {
+    let context = this;
+    !!timeId && clearTimeout(timeId);
+    timeId = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
   };
 }
-let count = 10;
-let counter1 = initCounter('btnCount1');
-let counter2 = initCounter('btnCount2');
-
-// here `btn1` and `btn2` are id of HTML buttons.
-<button onclick="counter1()">1</button>
-<p id="btnCount1"></p>
-<button onclick="counter2()">2</button>
-<p id="btnCount2"></p>
 ```
 
-### Real life example 2 (append string data)
+### throttle example
 
 ```js
-function initAddString(inputId, outputId) {
-  let str = '';
-  return function () {
-    str += ' ' + document.getElementById(inputId).value;
-    document.getElementById(inputId).value = '';
-    document.getElementById(outputId).innerText = str;
+function throttle(fn, delay) {
+  let timeId = null;
+  return function (...args) {
+    let context = this;
+    if (timeId) return;
+    fn.apply(context, args);
+    timeId = setTimeout(() => {
+      timeId = null;
+    }, delay);
+  };
+}
+```
+
+### Simple Addition with Memoization
+
+```js
+function memoizeAdd() {
+  const cache = {};
+
+  return function (a, b) {
+    const key = `${a},${b}`; // Use a string key to store result for inputs a and b
+
+    if (key in cache) {
+      console.log("Fetching from cache:", key);
+      return cache[key];
+    }
+
+    console.log("Calculating result:", key);
+    const result = a + b;
+    cache[key] = result;
+
+    return result;
   };
 }
 
-let strAdder1 = initAddString('text1', 'text-output1');
-let strAdder2 = initAddString('text2', 'text-output2');
+const add = memoizeAdd();
 
-// HTML
-<input type="text" id="text1">
-<button onclick="strAdder1()">Add String</button>
-<p id="text-output1"></p>
+console.log(add(3, 5)); // Output: 8 (calculated)
+console.log(add(3, 5)); // Output: 8 (fetched from cache)
+console.log(add(10, 15)); // Output: 25 (calculated)
+console.log(add(10, 15)); // Output: 25 (fetched from cache)
+```
 
-<input type="text" id="text2">
-<button onclick="strAdder2()">Add String</button>
-<p id="text-output2"></p>
+### Memoization with Closures Example
+
+```js
+// Fibonacci Function Without Memoization (Inefficient)
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10)); // 55
+
+// Fibonacci Function With Memoization (efficient)
+function memoizedFibonacci() {
+  // This cache object stores the results of the previous Fibonacci calculations.
+  const cache = {};
+
+  // This function uses the cache to avoid recalculating values.
+  return function fib(n) {
+    // Check if the result is already in the cache
+    if (n in cache) {
+      return cache[n];
+    }
+
+    // Base cases: Fibonacci(0) = 0, Fibonacci(1) = 1
+    if (n <= 1) {
+      cache[n] = n;
+      return n;
+    }
+
+    // Recursively calculate the Fibonacci value and store it in the cache
+    cache[n] = fib(n - 1) + fib(n - 2);
+
+    // Return the cached result
+    return cache[n];
+  };
+}
+
+const fib = memoizedFibonacci();
+
+console.log(fib(10)); // 55
+console.log(fib(50)); // 12586269025 (computed much faster)
 ```
 
 **[Interview questions](https://roadsidecoder.hashnode.dev/closures-javascript-interview-questions)**
