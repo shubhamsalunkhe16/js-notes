@@ -324,11 +324,12 @@ for (let i = 0; i <= 9; i++) {
 
 # for-in and for-of loop
 
-- Both `for..of` and `for..in` statements `iterate` over lists
-- the `values iterated on are different though`
-- only `for..in` used to iterate object
-- `for..in` returns a `keys for object` and return `index of array`
-- `for..of` returns a list of `values`
+| Feature            | `for-in`                         | `for-of`                      |
+|--------------------|-----------------------------------|--------------------------------|
+| **Purpose**        | Iterates over object properties (keys). | Iterates over iterable values.|
+| **Works With**     | Objects and arrays.              | Iterables like arrays, strings, maps, sets. |
+| **Returns**        | Property names (keys) or indexes.| Values.                       |
+| **Use Case**       | When you need property keys.     | When you need values.         |
 
 ```js
 let list = [4, 5, 6];
