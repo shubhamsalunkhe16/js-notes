@@ -72,6 +72,86 @@ a();
 
 ![call-stack](./images/call-stack/call-stack-2.gif)
 
+# Event Loop
+
+- The Event Loop is a core concept in JavaScript that `helps manage asynchronous tasks`, `allowing non-blocking I/O` while `still being single-threaded`.
+
+#### Event Loop in JavaScript: Code Example
+
+```js
+console.log("Chef starts working");
+
+// Synchronous task: Preparing a salad
+console.log("Chef makes a salad");
+
+// Asynchronous task: Putting a pizza in the oven (setTimeout represents baking time)
+setTimeout(() => {
+  console.log("Pizza is baked and ready to serve!");
+}, 10000); // Pizza takes 10 seconds to bake
+
+// Synchronous task: Preparing another salad
+console.log("Chef makes another salad");
+
+console.log("Chef continues working while waiting for the pizza");
+```
+
+- `Call Stack`: The chef's immediate tasks (preparing salads).
+- `Task Queue`: The pizza being in the oven (waiting for a timer to complete).
+- `Event Loop`: The chef (or JavaScript runtime) keeps an eye on both. As soon as the synchronous tasks are finished (salads are done), the chef can take the asynchronous callback (the pizza) from the Task Queue and finish that too.
+
+![event-loop](./images/promises/event-loop/event-loop-1.gif)
+![event-loop](./images/promises/event-loop/event-loop-2.gif)
+![event-loop](./images/promises/event-loop/event-loop-3.gif)
+![event-loop](./images/promises/event-loop/event-loop-4.gif)
+![event-loop](./images/promises/event-loop/event-loop-5.gif)
+
+- lets see one example
+
+```js
+const foo = () => console.log("First");
+const bar = () => setTimeout(() => console.log("Second"), 500);
+const baz = () => console.log("Third");
+
+bar();
+foo();
+baz();
+```
+
+![event-loop](./images/promises/event-loop/event-loop-6.gif)
+
+# Microtasks and (Macro)tasks
+
+| (Macro)task  |      Microtask      |
+| :----------- | :-----------------: |
+| setTimeout   |  process.nextTick   |
+| setInterval  |  Promise callback   |
+| setImmediate | queueMicrotask neat |
+
+### The event loop gives a different priority to the tasks:
+
+1. All `functions` in that are currently in the call stack get `executed`. When they `returned a value`, they get `popped off the stack`. eg.`Task1`
+
+2. `event loop` checks if `call stack is empty`. if empty, all queued up `microtasks` are `popped` onto the callstack `one by one`, and get `executed`. eg.`Task2`,`Task3`, `Task4`
+
+3. `event loop` checks if both the `call stack and microtask queue are empty`.if empty, all queued up `macrotasks` are `popped` onto the callstack `one by one`, and get `executed`. eg.`Task5`,`Task6`
+
+```
+- Microtasks has higher priority than (Macro)tasks
+- Microtasks will execute first
+- Microtasks > (Macro)tasks
+```
+
+![task-queue](./images/promises/task-queue/micro-macro-2.gif)
+
+- lets see with the example
+
+![taskQueue](./images/promises/task-queue/micro-macro-3.gif)
+![task-queue](./images/promises/task-queue/micro-macro-4.gif)
+![task-queue](./images/promises/task-queue/micro-macro-5.gif)
+![task-queue](./images/promises/task-queue/micro-macro-6.gif)
+![task-queue](./images/promises/task-queue/micro-macro-7.gif)
+![task-queue](./images/promises/task-queue/micro-macro-8.gif)
+
 # Hoisting
 
 - hoisting is a behavior where `variable and function declarations` are moved ("hoisted") to the `top of their containing scope` during the `compilation phase`, before the code is executed.

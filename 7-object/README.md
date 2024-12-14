@@ -150,60 +150,163 @@ console.log(person.getFullName());
 // Asabeneh Yetayeh
 ```
 
-### this
+# "this" Keyword
 
-- The value of `this is defined at run-time`
-- its value is `evaluated at call-time` and `does not depend on where the method was declared`
-- depends on what object is `before the dot`
-- `Arrow functions` have no `this`
-- When this is accessed inside an arrow function, it is taken from outside `this = window`
+## **Global Context**
 
-### “this” is not bound
+In the global context or outside of any function, `this` refers to the global object:
 
-```js
-let user = { name: "John" };
-let admin = { name: "Admin" };
+- In browsers, it's the `window` object.
+- In Node.js, it's `global`.
 
-function sayHi() {
-  alert(this.name);
-}
+Example:
 
-// use the same function in two objects
-user.f = sayHi;
-admin.f = sayHi;
-
-// these calls have different this
-// "this" inside the function is the object "before the dot"
-user.f(); // John  (this == user)
-admin.f(); // Admin  (this == admin)
-
-admin["f"](); // Admin (dot or square brackets access the method – doesn't matter)
+```javascript
+console.log(this); // In a browser: window, in Node.js: global
 ```
 
-#### Calling without an object
+---
 
-```js
-function sayHi() {
-  alert(this);
+## **Inside Functions**
+
+### a. **Regular Function**
+
+- `this` refers to the `global object` (`window` in browsers) in non-strict mode. In strict mode, `this` is `undefined`.
+
+Example:
+
+```javascript
+function showThis() {
+  console.log(this); // window (non-strict), undefined (strict mode)
 }
 
-// In strict mode
-sayHi(); // undefined
-
-// In non-strict mode
-sayHi(); // window object
+showThis();
 ```
 
-#### Method shorthand
+### b. **Inside Methods**
 
-```js
-// method shorthand looks better, right?
-user = {
-  sayHi() {
-    // same as "sayHi: function(){...}"
-    alert("Hello");
+When `this` is used inside an object method, it refers to the object that owns the method.
+
+Example:
+
+```javascript
+const obj = {
+  name: "JavaScript",
+  getName: function () {
+    return this.name; // Refers to obj
   },
 };
+
+console.log(obj.getName()); // "JavaScript"
+```
+
+---
+
+### c. **Arrow Function**
+
+- do not have their own `this`. They inherit `this` from the enclosing context.
+
+Example:
+
+```javascript
+const obj = {
+  name: "JavaScript",
+  showThis: () => {
+    console.log(this); // Refers to the enclosing scope, not obj
+  },
+};
+
+obj.showThis(); // window (or global in Node.js)
+```
+
+---
+
+## **Inside Constructors and Classes**
+
+In a constructor function or class, `this` refers to the instance being created.
+
+### Constructor Example:
+
+```javascript
+function Person(name) {
+  this.name = name;
+}
+
+const person = new Person("John");
+console.log(person.name); // "John"
+```
+
+### Class Example:
+
+```javascript
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+const person = new Person("John");
+console.log(person.name); // "John"
+```
+
+---
+
+## **Explicitly Setting `this`**
+
+You can explicitly set the value of `this` using `call`, `apply`, or `bind`.
+
+### a. **call()**
+
+Calls a function with a specified `this` value and arguments.
+
+```javascript
+function greet(greeting) {
+  console.log(`${greeting}, ${this.name}`);
+}
+
+const user = { name: "Alice" };
+greet.call(user, "Hello"); // "Hello, Alice"
+```
+
+### b. **apply()**
+
+Similar to `call()`, but takes arguments as an array.
+
+```javascript
+greet.apply(user, ["Hi"]); // "Hi, Alice"
+```
+
+### c. **bind()**
+
+Returns a new function with a specified `this` value.
+
+```javascript
+const boundGreet = greet.bind(user);
+boundGreet("Welcome"); // "Welcome, Alice"
+```
+
+---
+
+## **Event Handlers**
+
+### a. Default Behavior
+
+In DOM event handlers, `this` refers to the element that fired the event.
+
+```javascript
+document.querySelector("button").addEventListener("click", function () {
+  console.log(this); // The button element
+});
+```
+
+### b. Arrow Functions in Event Handlers
+
+Arrow functions inherit `this` from the surrounding context.
+
+```javascript
+document.querySelector("button").addEventListener("click", () => {
+  console.log(this); // window or global context
+});
 ```
 
 ### Object Methods
@@ -366,17 +469,6 @@ Object.assign(dest, ...sources);
 - The first argument dest is a `target object`
 - Further arguments is a `list of source objects`
 
-3. spread operator
-
-```js
-let user = {
-  name: "John",
-  age: 30,
-};
-
-let userClone = { ...user };
-```
-
 #### merge objects
 
 ```js
@@ -405,7 +497,7 @@ alert(clone.name); // John
 alert(clone.age); // 30
 ```
 
-### Nested cloning (Deep Cloning)
+### Nested cloning
 
 ```js
 let user = {
@@ -447,20 +539,6 @@ alert(clone.sizes.width); // 50, not related
 ```
 
 - use `Object.assign` for the so-called `shallow copy` (nested objects are copied by reference) or a `deep cloning` function `structuredClone` or use a `custom cloning implementation`
-
-- **NOTE** : `JSON.stringify and JSON.parse` : this method utilizes the fact that every JSON can be converted to a string value (exception of methods/functions)
-
-```js
-let addressObject = { city: "delhi", state: "delhi" };
-
-let person = {
-  name: "John",
-  address: addressObject,
-};
-
-let str = JSON.stringify(person);
-let jsonObject = JSON.parse(str);
-```
 
 ### Constructor function
 
@@ -593,174 +671,6 @@ userAdmin.admin?.(); // I am admin
 userGuest.admin?.(); // nothing happens (no such method)
 ```
 
-## Getters and setters
-
-- In an object literal they are denoted by `get` and `set`:
-
-```js
-let user = {
-  name: "John",
-  surname: "Smith",
-
-  get fullName() {
-    return `${this.name} ${this.surname}`;
-  },
-};
-
-alert(user.fullName); // John Smith
-
-// If we attempt to assign user.fullName=, there will be an error:
-user.fullName = "Test"; // Error (property has only a getter)
-```
-
-- fix it by adding a setter for user.fullName:
-
-```js
-let user = {
-  name: "John",
-  surname: "Smith",
-
-  get fullName() {
-    return `${this.name} ${this.surname}`;
-  },
-
-  set fullName(value) {
-    [this.name, this.surname] = value.split(" ");
-  },
-};
-
-// set fullName is executed with the given value.
-user.fullName = "Alice Cooper";
-
-alert(user.name); // Alice
-alert(user.surname); // Cooper
-```
-
-## Property flags and descriptors
-
-### Property flags
-
-- Object properties, besides a value, have three special attributes (so-called “flags”):
-
-  - `writable` – if true, the value can be changed, otherwise it’s read-only.
-  - `enumerable` – if true, then listed in loops, otherwise not listed.
-  - `configurable` – if true, the property can be deleted and these attributes can be modified, otherwise not.
-
-- method `Object.getOwnPropertyDescriptor` allows to query the full information about a property.
-
-```js
-let user = {
-  name: "John",
-};
-
-let descriptor = Object.getOwnPropertyDescriptor(user, "name");
-
-alert(JSON.stringify(descriptor, null, 2));
-/* property descriptor:
-{
-  "value": "John",
-  "writable": true,
-  "enumerable": true,
-  "configurable": true
-}
-*/
-```
-
-- To change the flags, we can use Object.defineProperty.
-
-**Non-writable**
-
-```js
-let user = {
-  name: "John",
-};
-
-Object.defineProperty(user, "name", {
-  writable: false,
-});
-
-user.name = "Pete"; // Error: Cannot assign to read only property 'name'
-```
-
-**Non-enumerable**
-
-```js
-let user = {
-  name: "John",
-  toString() {
-    return this.name;
-  },
-};
-
-Object.defineProperty(user, "toString", {
-  enumerable: false,
-});
-
-// Now our toString disappears:
-for (let key in user) alert(key); // name
-```
-
-**Non-configurable**
-
-- A non-configurable property `can’t be deleted`, its attributes `can’t be modified`.
-
-```js
-let descriptor = Object.getOwnPropertyDescriptor(Math, "PI");
-
-alert(JSON.stringify(descriptor, null, 2));
-/*
-{
-  "value": 3.141592653589793,
-  "writable": false,
-  "enumerable": false,
-  "configurable": false
-}
-*/
-Math.PI = 3; // Error, because it has writable: false
-// delete Math.PI won't work either
-
-// Error, because of configurable: false
-Object.defineProperty(Math, "PI", { writable: true });
-```
-
-- Object.defineProperties(obj, descriptors) that allows to define many properties at once
-
-```js
-Object.defineProperties(user, {
-  name: { value: "John", writable: false },
-  surname: { value: "Smith", writable: false },
-  // ...
-});
-```
-
-### Sealing an object globally
-
-#### `Object.preventExtensions(obj)`
-
-Forbids the `addition of new properties` to the object.
-
-#### `Object.seal(obj)`
-
-Forbids `adding/removing` of properties. Sets `configurable: false` for all existing properties.
-
-#### `Object.freeze(obj)`
-
-Forbids `adding/removing/changing` of properties. Sets `configurable: false, writable: false` for all existing properties.
-
-### _And also there are tests for them:_
-
-#### `Object.isExtensible(obj)`
-
-Returns `false` if `adding properties is forbidden`, otherwise true.
-
-#### `Object.isSealed(obj)`
-
-Returns `true` if `adding/removing properties is forbidden`, and all existing properties have configurable: false.
-
-#### `Object.isFrozen(obj)`
-
-Returns `true` if `adding/removing/changing properties is forbidden`, and all current properties are configurable: false, writable: false.
-
 # Map
 
 - `a collection of keyed values`.
@@ -846,64 +756,3 @@ for (let entry of recipeMap) {
 ```
 
 - The insertion order is used
-
-# call,apply and bind
-
-- `call(), apply(), and bind()` are methods used to `control the value of this` inside a `function` and to invoke or attach methods `from one object to another`
-
-1. call()
-
-- `Invokes the function immediately` with `arguments passed individually`
-
-```js
-const person = {
-  name: "John",
-  greet: function (message) {
-    console.log(`${message}, I am ${this.name}.`);
-  },
-};
-
-const person2 = { name: "Jane" };
-
-// Calling greet for person2 using person’s greet method
-person.greet.call(person2, "Hello"); // Output: "Hello, I am Jane."
-```
-
-2. apply()
-
-- `Invokes the function immediately` but with `arguments passed as an array`.
-
-```js
-const person = {
-  name: "John",
-  greet: function (message1, message2) {
-    console.log(`${message1} ${message2}, I am ${this.name}.`);
-  },
-};
-
-const person2 = { name: "Jane" };
-
-// Calling greet for person2 using apply
-person.greet.apply(person2, ["Hi", "there"]); // Output: "Hi there, I am Jane."
-```
-
-3. bind()
-
-- `Does not invoke the function immediately`; instead, it `returns a new function with this permanently set to a specific object`
-
-```js
-const person = {
-  name: "John",
-  greet: function () {
-    console.log(`Hello, I am ${this.name}.`);
-  },
-};
-
-const person2 = { name: "Jane" };
-
-// Create a new function with 'this' bound to person2
-const greetJane = person.greet.bind(person2);
-
-// Call the new bound function later
-greetJane(); // Output: "Hello, I am Jane."
-```

@@ -27,7 +27,7 @@ function functionName() {
 functionName(); // calling function by its name and with parentheses
 ```
 
-### Parameters VS Arguments
+### Parameters
 
 - We can pass arbitrary data to functions using parameters.
 
@@ -37,8 +37,8 @@ function showMessage(from, text) {
   alert(from + ": " + text);
 }
 
-showMessage("Ann", "Hello!"); // Arguments:"Ann", "Hello!"
-showMessage("Ann", "What's up?"); // Arguments:"Ann", "What's up?"
+showMessage("Ann", "Hello!"); // Ann: Hello! (*)
+showMessage("Ann", "What's up?"); // Ann: What's up? (**)
 ```
 
 ### Function returning value
@@ -206,7 +206,7 @@ console.log(greetings());
 console.log(greetings("Asabeneh"));
 ```
 
-## Self Invoking Functions ( Immediately Invoked Function Expression - IIFE )
+### Self Invoking Functions ( Immediately Invoked Function Expression - IIFE )
 
 - are `anonymous functions` which do not need to be called to return a value.
 - it called `Immediately`

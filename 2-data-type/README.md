@@ -1,6 +1,8 @@
 # Data types
 
-- We can put `any type` in a variable (`dynamically typed`)
+- We can put `any type` in a variable
+
+- hence it is `dynamically typed`
 
 ```js
 // no error
@@ -10,12 +12,13 @@ message = 123456;
 
 ## _Primitive Data Type_
 
-- `values can contain only a single thing` (string/number/whatever)
+- They are called `primitive` because their `values can contain only a single thing` (be it a string or a number or whatever)
+
 - `String`, `Number`, `Boolean`, `Undefined`, `Null`, `BigInt` and `Symbol`
 
 ### 1. String
 
-- `series of characters` enclosed with `single` quotes, `double` quotes or `backticks`
+- A string is any `series of characters` enclosed with `single` quotes, `double` quotes or `backticks`
 
 ```js
 let firstName = "John";
@@ -36,14 +39,14 @@ alert(`Hello, ${firstName}!`); // Hello, John!
 
 #### **String Methods**
 
-1. `length`: returns the `number of characters`
+1. `_length_`: returns the `number of characters`
 
 ```js
 let js = "JavaScript";
 console.log(js.length); // 10
 ```
 
-2. `Accessing characters in a string`: We can access each character in a string using its `index`.
+2. `_Accessing characters in a string_`: We can access each character in a string using its `index`.
 
 ```js
 let string = "JavaScript";
@@ -54,48 +57,48 @@ console.log(lastIndex); // 9
 console.log(string[lastIndex]); // t
 ```
 
-3. `toUpperCase()`: changes the string to `uppercase` letters
+3. `_toUpperCase()_`: changes the string to `uppercase` letters
 
 ```js
 let string = "JavaScript";
 console.log(string.toUpperCase()); // JAVASCRIPT
 ```
 
-4. `toLowerCase()`: changes the string to `lowercase` letters.
+4. `_toLowerCase()_`: changes the string to `lowercase` letters.
 
 ```js
 let string = "JavasCript";
 console.log(string.toLowerCase()); // javascript
 ```
 
-5. `substr()`: It takes `two arguments`, the `starting index` and `number of characters to slice`.
+5. `_substr()_`: It takes `two arguments`, the `starting index` and `number of characters to slice`.
 
 ```js
 const str = "substr";
 
-console.log(str.substr(1, 3)); // ubs
-console.log(str.substr(1)); // ubstr
+console.log(str.substr(1, 2)); // (1, 2): ub
+console.log(str.substr(1)); // (1): ubstr
 
 /* can pass negative start index */
-console.log(str.substr(-3, 2)); // st
-console.log(str.substr(-3)); // str
+console.log(str.substr(-3, 2)); // (-3, 2): st
+console.log(str.substr(-3)); // (-3): str
 ```
 
-6. `slice()`: It takes `two arguments`, the `starting index` and the `stopping index`. can pass negative indices for both args
+6. `slice()_`: It takes `two arguments`, the `starting index` and the `stopping index`. can pass negative indices for both args
 
 ```js
 const str = "The quick brown fox jumps over the lazy dog.";
 
-console.log(str.slice(31)); // "the lazy dog."
+console.log(str.slice(31)); // expected output: "the lazy dog."
 
-console.log(str.slice(4, 19)); // "quick brown fox"
+console.log(str.slice(4, 19)); // expected output: "quick brown fox"
 
-console.log(str.slice(-4)); // "dog."
+console.log(str.slice(-4)); // expected output: "dog."
 
-console.log(str.slice(-9, -5)); // "lazy"
+console.log(str.slice(-9, -5)); // expected output: "lazy"
 ```
 
-7. `substring()`: It takes `two arguments`, the `starting index` and the `stopping index` but it `doesn't include` the character at the `stopping index`.
+7. `_substring()_`: It takes `two arguments`, the `starting index` and the `stopping index` but it `doesn't include` the character at the `stopping index`.
 
 ```js
 let string = "JavaScript";
@@ -110,7 +113,7 @@ console.log(string.substring(4)); // Script
 | substring(start, end) | between start and end (not including end) | negative values mean 0 |
 | substr(start, length) | from start get length characters          | allows negative start  |
 
-8. `split()`: `splits` a string at a specified place.
+8. `_split()_`: `splits` a string at a specified place.
 
 ```js
 let string = "30 Days Of JavaScript";
@@ -122,7 +125,7 @@ console.log(countries.split(",")); // split to any array at comma -> ["Finland",
 console.log(countries.split(", ")); //  ["Finland", "Sweden", "Norway", "Denmark", "and Iceland"]
 ```
 
-9. `trim()`: `Removes trailing space` in the `beginning` or the `end` of a string.
+9. `_trim()_`: `Removes trailing space` in the `beginning` or the `end` of a string.
 
 ```js
 let string = "   30 Days Of JavaScript   ";
@@ -135,7 +138,7 @@ console.log(string.trim(" "));
 30 Days Of JavasCript
 ```
 
-10. `includes()`: returns a `boolean`. If a `substring exist` in a string, it returns `true`, otherwise it returns `false`.
+10. `_includes()_`: returns a `boolean`. If a `substring exist` in a string, it returns `true`, otherwise it returns `false`.
 
 ```js
 let string = "30 Days Of JavaScript";
@@ -143,7 +146,7 @@ console.log(string.includes("Days")); // true
 console.log(string.includes("days")); // false - it is case sensitive!
 ```
 
-11. `replace()`: takes as a parameter the old substring and a new substring.
+11. `_replace()_`: takes as a parameter the old substring and a new substring.
 
 ```js
 string.replace(oldsubstring, newsubstring);
@@ -154,7 +157,7 @@ let string = "30 Days Of JavaScript";
 console.log(string.replace("JavaScript", "Python")); // 30 Days Of Python
 ```
 
-12. `charAt()`: Takes `index` and it returns the `value at that index`
+12. `_charAt()_`: Takes `index` and it returns the `value at that index`
 
 ```js
 string.charAt(index);
@@ -167,7 +170,7 @@ let lastIndex = string.length - 1;
 console.log(string.charAt(lastIndex)); // t
 ```
 
-13. `charCodeAt()`: Takes `index` and it returns `char code (ASCII number)` of the value at that index
+13. `_charCodeAt()_`: Takes `index` and it returns `char code (ASCII number)` of the value at that index
 
 ```js
 string.charCodeAt(index);
@@ -180,7 +183,7 @@ let lastIndex = string.length - 1;
 console.log(string.charCodeAt(lastIndex)); // t ASCII is 116
 ```
 
-14. `indexOf()`: Takes a `substring` and if the substring `exists` in a string it returns the `first position` of the substring if `does not exist` it returns `-1`
+14. `_indexOf()_`: Takes a `substring` and if the substring `exists` in a string it returns the `first position` of the substring if `does not exist` it returns `-1`
 
 ```js
 string.indexOf(substring);
@@ -193,7 +196,7 @@ console.log(string.indexOf("Days")); // 3
 console.log(string.indexOf("days")); // -1
 ```
 
-15. `lastIndexOf()`: Takes a `substring` and if the substring `exists` in a string it returns the `last position` of the substring if it `does not exist` it returns `-1`
+15. `_lastIndexOf()_`: Takes a `substring` and if the substring `exists` in a string it returns the `last position` of the substring if it `does not exist` it returns `-1`
 
 ```js
 //syntax
@@ -208,7 +211,7 @@ console.log(string.lastIndexOf("you")); // 63
 console.log(string.lastIndexOf("JavaScript")); // 38
 ```
 
-16. `concat()`: it takes many substrings and joins them.
+16. `_concat()_`: it takes many substrings and joins them.
 
 ```js
 string.concat(substring, substring, substring);
@@ -219,7 +222,7 @@ let string = "30";
 console.log(string.concat("Days", "Of", "JavaScript")); // 30DaysOfJavaScript
 ```
 
-17. `startsWith`: it takes a `substring` as an argument and it checks if the string `starts with that specified substring`. It returns a `boolean`.
+17. `_startsWith_`: it takes a `substring` as an argument and it checks if the string `starts with that specified substring`. It returns a `boolean`.
 
 ```js
 //syntax
@@ -232,7 +235,7 @@ console.log(string.startsWith("Love")); // true
 console.log(string.startsWith("love")); // false
 ```
 
-18. `endsWith`: it takes a `substring` as an argument and it checks if the string `ends with that specified substring`. It returns a `boolean`.
+18. `_endsWith_`: it takes a `substring` as an argument and it checks if the string `ends with that specified substring`. It returns a `boolean`.
 
 ```js
 string.endsWith(substring);
@@ -245,7 +248,7 @@ console.log(string.endsWith("love")); // false
 console.log(string.endsWith("in the world")); // true
 ```
 
-19. `search`: it takes a `substring` as an argument and it returns the `index` of the first match. The search value can be a `string` or a `regular expression pattern`.
+19. `_search_`: it takes a `substring` as an argument and it returns the `index` of the first match. The search value can be a `string` or a `regular expression pattern`.
 
 ```js
 string.search(substring);
@@ -258,7 +261,7 @@ console.log(string.search("love")); // 2
 console.log(string.search(/javascript/gi)); // 7
 ```
 
-20. `match`: it takes a `substring` or `regular expression pattern` as an argument and it returns an `array` if there is `match` if `not` it returns `null`. Let us see how a regular expression pattern looks like. It starts with / sign and ends with / sign.
+20. `_match_`: it takes a `substring` or `regular expression pattern` as an argument and it returns an `array` if there is `match` if `not` it returns `null`. Let us see how a regular expression pattern looks like. It starts with / sign and ends with / sign.
 
 ```js
 let string = "love";
@@ -283,7 +286,7 @@ console.log(string.match("love"));
 ["love", index: 2, input: "I love JavaScript. If you do not love JavaScript what else can you love.", groups: undefined]
 ```
 
-21. `repeat()`: it takes a `number` as argument and it returns the `repeated version of the string`.
+21. `_repeat()_`: it takes a `number` as argument and it returns the `repeated version of the string`.
 
 ```js
 string.repeat(n);
@@ -294,7 +297,7 @@ let string = "love";
 console.log(string.repeat(10)); // lovelovelovelovelovelovelovelovelovelove
 ```
 
-21. `pad...()`: adds `extra character` to get required length.
+21. `pad...()_`: adds `extra character` to get required length.
 
 ```js
 var s = "10";
@@ -307,7 +310,7 @@ console.log(s.padEnd("5", "0"));
 
 ### 2. Number
 
-- represents both `integer` and `floating point` numbers
+- The number type represents both `integer and floating point` numbers
 
 - There are many `operations` for numbers
 
@@ -475,6 +478,8 @@ let age = null;
 
 ### 6 .Undefined
 
+- The meaning of `undefined` is `value is not assigned`.
+
 - If a variable is `declared`, but `not assigned`, then its value is `undefined`
 
 ```js
@@ -495,6 +500,13 @@ console.log(null === undefined); // false
 
 console.log(typeof null); // Object
 console.log(typeof undefined); // undefined
+
+let a = null;
+console.log(a); // null
+
+let c;
+let d = undefined;
+console.log(c, d); // undefined undefined
 ```
 
 ### Strange result: null vs 0
@@ -527,8 +539,9 @@ alert(id1 == id2); // false
 
 ## _# Non-Primitive Data Type (object/array)_
 
+- All other types are called `primitive` because their values can `contain only a single thing` (be it a string or a number or whatever)
+
 - used to store `collections of data` and `more complex entities`
-- will see `Objects` and `Arrays` later
 
 ## Checking Data Types and Casting
 
@@ -572,11 +585,52 @@ alert("6" / "2"); // 3, converts both operands to numbers
 
 ```js
 let num = "10";
-let numInt1 = parseInt(num); // 10
-let numInt2 = Number(num); // 10
-let numInt3 = +num; // 10
+let numInt = parseInt(num);
+console.log(numInt); // 10
+```
 
+```js
+let num = "10";
+let numInt = Number(num);
+console.log(numInt); // 10
+```
+
+```js
+let num = "10";
+let numInt = +num;
+console.log(numInt); // 10
+```
+
+#### String to Float
+
+- parseFloat()
+- Number()
+- Plus sign(+)
+
+```js
 let num = "9.81";
-let numFloat = parseFloat(num); //9.81 (str to float)
-let numFloat = parseInt(num); //9 (str to Int)
+let numFloat = parseFloat(num);
+console.log(numFloat); // 9.81
+```
+
+```js
+let num = "9.81";
+let numFloat = Number(num);
+console.log(numFloat); // 9.81
+```
+
+```js
+let num = "9.81";
+let numFloat = +num;
+console.log(numFloat); // 9.81
+```
+
+#### Float to Int
+
+- parseInt()
+
+```js
+let num = 9.81;
+let numInt = parseInt(num);
+console.log(numInt); // 9
 ```

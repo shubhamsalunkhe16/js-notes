@@ -83,33 +83,6 @@ orderPizza("Margherita")
   });
 ```
 
-### Explanation:
-
-1. **Promise Creation**:
-
-   - The `orderPizza` function returns a new `Promise`.
-   - Inside the promise, we simulate the pizza ordering process using `setTimeout` (which is asynchronous).
-   - After 3 seconds, the promise either `resolves` (pizza delivered) or `rejects` (delivery failure), depending on a random success rate (80% chance of success in this case).
-
-2. **`then()`**:
-
-   - This is where the success case is handled. If the promise is fulfilled (pizza delivered), the message `"Pizza delivered! Enjoy!"` is printed.
-
-3. **`catch()`**:
-
-   - This handles the failure case. If the promise is rejected (delivery failed), an error message is printed.
-
-4. **`finally()`**:
-   - This block runs regardless of whether the promise was fulfilled or rejected. It thanks the customer for ordering, just like how a pizza place would always show appreciation whether the delivery succeeds or not.
-
-### Real-Life Analogy:
-
-- **Pending (Order in Progress)**: The pizza is being prepared and delivered.
-- **Resolved (Fulfilled)**: The pizza is successfully delivered.
-- **Rejected (Failed)**: Something went wrong, and the pizza couldn't be delivered.
-
-By using promises, we can handle asynchronous operations in a clean and structured way, allowing us to manage success and failure cases efficiently.
-
 ## `.then` chain
 
 - `.then` handlers can `solve callback hell problem`
@@ -249,89 +222,9 @@ Promise.any([pizza1, pizza2, pizza3])
   });
 ```
 
-# Event Loop
-
-- The Event Loop is a core concept in JavaScript that `helps manage asynchronous tasks`, `allowing non-blocking I/O` while `still being single-threaded`.
-
-#### Event Loop in JavaScript: Code Example
-
-```js
-console.log("Chef starts working");
-
-// Synchronous task: Preparing a salad
-console.log("Chef makes a salad");
-
-// Asynchronous task: Putting a pizza in the oven (setTimeout represents baking time)
-setTimeout(() => {
-  console.log("Pizza is baked and ready to serve!");
-}, 10000); // Pizza takes 10 seconds to bake
-
-// Synchronous task: Preparing another salad
-console.log("Chef makes another salad");
-
-console.log("Chef continues working while waiting for the pizza");
-```
-
-- `Call Stack`: The chef's immediate tasks (preparing salads).
-- `Task Queue`: The pizza being in the oven (waiting for a timer to complete).
-- `Event Loop`: The chef (or JavaScript runtime) keeps an eye on both. As soon as the synchronous tasks are finished (salads are done), the chef can take the asynchronous callback (the pizza) from the Task Queue and finish that too.
-
-![event-loop](./images/promises/event-loop/event-loop-1.gif)
-![event-loop](./images/promises/event-loop/event-loop-2.gif)
-![event-loop](./images/promises/event-loop/event-loop-3.gif)
-![event-loop](./images/promises/event-loop/event-loop-4.gif)
-![event-loop](./images/promises/event-loop/event-loop-5.gif)
-
-- lets see one example
-
-```js
-const foo = () => console.log("First");
-const bar = () => setTimeout(() => console.log("Second"), 500);
-const baz = () => console.log("Third");
-
-bar();
-foo();
-baz();
-```
-
-![event-loop](./images/promises/event-loop/event-loop-6.gif)
-
-# Microtasks and (Macro)tasks
-
-| (Macro)task  |      Microtask      |
-| :----------- | :-----------------: |
-| setTimeout   |  process.nextTick   |
-| setInterval  |  Promise callback   |
-| setImmediate | queueMicrotask neat |
-
-### The event loop gives a different priority to the tasks:
-
-1. All `functions` in that are currently in the call stack get `executed`. When they `returned a value`, they get `popped off the stack`. eg.`Task1`
-
-2. `event loop` checks if `call stack is empty`. if empty, all queued up `microtasks` are `popped` onto the callstack `one by one`, and get `executed`. eg.`Task2`,`Task3`, `Task4`
-
-3. `event loop` checks if both the `call stack and microtask queue are empty`.if empty, all queued up `macrotasks` are `popped` onto the callstack `one by one`, and get `executed`. eg.`Task5`,`Task6`
-
-```
-- Microtasks has higher priority than (Macro)tasks
-- Microtasks will execute first
-- Microtasks > (Macro)tasks
-```
-
-![task-queue](./images/promises/task-queue/micro-macro-2.gif)
-
-- lets see with the example
-
-![taskQueue](./images/promises/task-queue/micro-macro-3.gif)
-![task-queue](./images/promises/task-queue/micro-macro-4.gif)
-![task-queue](./images/promises/task-queue/micro-macro-5.gif)
-![task-queue](./images/promises/task-queue/micro-macro-6.gif)
-![task-queue](./images/promises/task-queue/micro-macro-7.gif)
-![task-queue](./images/promises/task-queue/micro-macro-8.gif)
-
 # Async/Await
 
 - introduced in `ES7`
 - `async` and `await` keywords, we can create `async` functions which implicitly return a promise
 
-![async-await](./images/promises/async-await.gif)
+![async-await](./images/async-await.gif)
