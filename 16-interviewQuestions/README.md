@@ -1,5 +1,7 @@
 ### Resources
 
+**[1000 Javascript Interview Questions You Should Answer!](https://github.com/sudheerj/javascript-interview-questions)**
+
 **[Top 13 Javascript Interview Questions You Should Answer!](https://gist.github.com/Mohamed-Code-309/12163e62bfd0bbef1a8c78c63d7c7924)**
 
 **[Currying : Interview questions](https://roadsidecoder.hashnode.dev/javascript-interview-questions-currying-output-based-questions-partial-application-and-more)**
