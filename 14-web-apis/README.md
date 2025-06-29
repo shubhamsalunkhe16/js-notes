@@ -186,3 +186,227 @@
     .then((stream) => (videoElement.srcObject = stream))
     .catch((error) => console.error(error));
   ```
+
+# Web Worker
+
+## 🧠 1. What Are Web Workers?
+
+> Web Workers let you run **JavaScript in the background**, on a **separate thread** from the main UI thread.
+
+✅ Prevents blocking the main thread during:
+
+- Heavy computations (e.g., image processing, sorting)
+- Data parsing (e.g., large JSON, CSV)
+- Repetitive loops
+- WebSocket/REST polling
+
+---
+
+## 🧵 2. Why Use Web Workers?
+
+| Reason                | Benefit                                 |
+| --------------------- | --------------------------------------- |
+| Non-blocking UI       | Keeps the interface responsive          |
+| Background processing | Offload CPU-heavy work from main thread |
+| Better performance    | Avoids "Page Unresponsive" errors       |
+| Parallelism           | Utilizes multi-core CPUs                |
+
+---
+
+## 🛠️ 3. Types of Workers
+
+| Type               | Description                                 |
+| ------------------ | ------------------------------------------- |
+| **Dedicated**      | One page ↔ one worker                       |
+| **Shared**         | Multiple scripts/tabs share the same worker |
+| **Service Worker** | Acts as a proxy (offline caching, push)     |
+
+For UI tasks, we mostly use **Dedicated Web Workers**.
+
+---
+
+## 📦 4. Web Worker Architecture (Flow)
+
+```txt
+Main Thread
+   |
+   | postMessage()
+   ↓
+[ Worker.js ]
+   ↑
+   | postMessage()
+   |
+Main Thread (onmessage)
+```
+
+---
+
+## 📄 5. Web Worker File (`worker.js`)
+
+```js
+// worker.js
+self.onmessage = function (e) {
+  const result = heavyCalculation(e.data);
+  self.postMessage(result);
+};
+
+function heavyCalculation(data) {
+  // simulate CPU work
+  return data * 2;
+}
+```
+
+---
+
+## 📥 6. Main Thread Script
+
+```js
+const worker = new Worker("worker.js");
+
+worker.postMessage(5); // send data to worker
+
+worker.onmessage = function (e) {
+  console.log("Received from worker:", e.data);
+};
+
+worker.onerror = function (e) {
+  console.error("Worker error:", e.message);
+};
+```
+
+---
+
+## 🧪 7. Real-World Use Cases
+
+| Use Case                 | Description                      |
+| ------------------------ | -------------------------------- |
+| Image/Video processing   | Filters, resizing, compression   |
+| Data parsing             | CSV/JSON parsing, log analysis   |
+| Math-heavy operations    | Physics simulations, games       |
+| Background fetch/polling | Avoid blocking fetch retry loops |
+| Real-time calculations   | Large dataset computations       |
+
+---
+
+## 🧩 8. Transferring Data Efficiently
+
+Large data = slow `postMessage`.
+
+Use **Transferable Objects** (no copy, just transfer memory reference):
+
+```js
+const buffer = new ArrayBuffer(1024);
+worker.postMessage(buffer, [buffer]); // faster!
+```
+
+---
+
+## 🧱 9. Limitations of Web Workers
+
+| Limitation                | Detail                             |
+| ------------------------- | ---------------------------------- |
+| No DOM access             | Cannot access `document`, `window` |
+| No alert, confirm, prompt | Only standard JS + fetch APIs      |
+| File must be same-origin  | Unless CORS headers allow it       |
+| Slight overhead to spawn  | Don’t use for trivial tasks        |
+
+---
+
+## ⚙️ 10. Terminating a Worker
+
+```js
+worker.terminate(); // stops the worker
+```
+
+Also, inside the worker you can do:
+
+```js
+self.close(); // worker self-destructs
+```
+
+---
+
+## 🧰 11. Inline Worker via Blob (no separate file)
+
+```js
+const blob = new Blob(
+  [
+    `
+  onmessage = e => postMessage(e.data * 10);
+`,
+  ],
+  { type: "application/javascript" }
+);
+
+const worker = new Worker(URL.createObjectURL(blob));
+worker.postMessage(7);
+worker.onmessage = (e) => console.log(e.data); // 70
+```
+
+✅ Useful for dynamic workers in single-page apps.
+
+---
+
+## 📦 12. Using Web Workers in Modern Frameworks
+
+| Framework       | Integration                                                |
+| --------------- | ---------------------------------------------------------- |
+| **React**       | Use via Webpack loader, Vite plugin, or `workerize-loader` |
+| **Vue/Angular** | Similar via plugins or file separation                     |
+| **Next.js**     | Requires custom Webpack config for worker file export      |
+
+Example:
+
+```ts
+// worker.js
+export default function () {
+  self.onmessage = (e) => self.postMessage(e.data * 3);
+}
+```
+
+---
+
+## 🚀 13. Debugging Web Workers
+
+- Use **Chrome DevTools → Sources → Workers**
+- You can:
+
+  - Inspect scripts
+  - Add breakpoints
+  - Log messages using `console.log()` inside worker
+
+---
+
+## 🧠 14. Best Practices
+
+✅ Name your worker threads descriptively
+✅ Always check browser support (`window.Worker`)
+✅ Use `Transferable` for large data
+✅ Cleanup unused workers with `terminate()`
+✅ Keep worker logic focused and decoupled
+
+---
+
+## 🔍 15. Browser Support
+
+| Browser    | Support            |
+| ---------- | ------------------ |
+| Chrome     | ✅ Full            |
+| Firefox    | ✅ Full            |
+| Safari     | ✅ Full            |
+| Edge/Opera | ✅ Full            |
+| IE         | ⚠️ Partial / buggy |
+
+---
+
+## 🧪 Summary Cheatsheet
+
+| Concept         | Syntax / Example                   |
+| --------------- | ---------------------------------- |
+| Create Worker   | `new Worker('worker.js')`          |
+| Send Data       | `worker.postMessage(data)`         |
+| Receive Data    | `worker.onmessage = (e) => {}`     |
+| Inside Worker   | `self.onmessage = (e) => {}`       |
+| Terminate       | `worker.terminate()`               |
+| Transfer Buffer | `postMessage(buffer, [buffer])`    |
+| No DOM Access   | Use fetch, math, memory, etc. only |

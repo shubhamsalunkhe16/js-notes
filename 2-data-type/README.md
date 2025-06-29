@@ -10,11 +10,75 @@ let message = "hello";
 message = 123456;
 ```
 
-## _Primitive Data Type_
+---
+
+## 💾 How Variables Get Stored?
+
+JavaScript organizes memory into two main areas:
+
+<div align="center">
+
+```
+┌─────────────────────┐      ┌──────────────────────┐
+│    STACK MEMORY     │      │     HEAP MEMORY      │
+│                     │      │                      │
+│  ┌───────┐          │      │   ┌──────────────┐   │
+│  │name   │ "John"   │      │   │              │   │
+│  ├───────┤          │      │   │  {complex    │   │
+│  │age    │ 25       │      │   │   objects}   │   │
+│  ├───────┤          │      │   │              │   │
+│  │isValid│ true     │      │   └──────┬───────┘   │
+│  ├───────┤          │      │          │           │
+│  │user   │ 0x123ABC │──────┼──────────┘           │
+│  └───────┘          │      │                      │
+│                     │      │                      │
+└─────────────────────┘      └──────────────────────┘
+   (Primitive Types)              (Reference Types)
+```
+
+</div>
+
+### 📚 Stack Memory
+
+- Stores primitive data types (numbers, strings, etc.)
+- Fixed size, fast access
+- Variables store the actual value directly
+
+### 📚 Heap Memory
+
+- Stores non-primitive data types (objects, arrays, functions)
+- Dynamic size, slower access
+- Variables store a reference (pointer) to the actual data
+
+```javascript
+// Stack storage (primitive)
+let count = 42; // Value 42 stored directly in stack
+
+// Heap storage (non-primitive)
+let person = {
+  // Reference to heap stored in stack
+  name: "John", // Actual object stored in heap
+  age: 30,
+};
+```
+
+This memory organization affects how variables behave when copied or compared.
+
+---
+
+## Primitive Data Type
 
 - They are called `primitive` because their `values can contain only a single thing` (be it a string or a number or whatever)
 
-- `String`, `Number`, `Boolean`, `Undefined`, `Null`, `BigInt` and `Symbol`
+| Type             | Description                         | Example                           |
+| ---------------- | ----------------------------------- | --------------------------------- |
+| 🔢 **Number**    | Integers and floating-point numbers | `let age = 25;`                   |
+| 📝 **String**    | Text characters                     | `let name = "JavaScript";`        |
+| ⚖️ **Boolean**   | Logical true/false values           | `let isActive = true;`            |
+| 🚫 **Undefined** | Variable declared but not assigned  | `let result;`                     |
+| 🗑️ **Null**      | Intentional absence of value        | `let data = null;`                |
+| 🔣 **Symbol**    | Unique and immutable identifier     | `let id = Symbol('id');`          |
+| 📏 **BigInt**    | Large integers                      | `let bigNum = 9007199254740991n;` |
 
 ### 1. String
 
@@ -314,16 +378,31 @@ console.log(s.padEnd("5", "0"));
 
 - There are many `operations` for numbers
 
-  | Operator | Description             |
-  | -------- | ----------------------- |
-  | +        | Addition                |
-  | -        | Subtraction             |
-  | \*       | Multiplication          |
-  | \*\*     | Exponentiation (ES2016) |
-  | /        | Division                |
-  | %        | Modulus (Remainder)     |
-  | ++       | Increment               |
-  | --       | Decrement               |
+- Operands, Operators, and Expressions
+
+  - **Expression**: A piece of code that produces a value.
+
+  - **Operands**: The values that operators work with.
+
+  - **Operators**: Symbols that perform operations on operands.
+
+```javascript
+// Example: 3 + 4
+// 3 and 4 are operands
+// + is the operator
+// The entire '3 + 4' is an expression that evaluates to 7
+```
+
+| Operator | Description             |
+| -------- | ----------------------- |
+| +        | Addition                |
+| -        | Subtraction             |
+| \*       | Multiplication          |
+| \*\*     | Exponentiation (ES2016) |
+| /        | Division                |
+| %        | Modulus (Remainder)     |
+| ++       | Increment               |
+| --       | Decrement               |
 
 - `special numeric values` - `Infinity`, `-Infinity` and `NaN`.
 
@@ -487,7 +566,7 @@ let age;
 alert(age); // shows "undefined"
 ```
 
-### Null vs Undefined
+#### Null vs Undefined
 
 | --        | --                                         |
 | --------- | ------------------------------------------ |
@@ -509,7 +588,7 @@ let d = undefined;
 console.log(c, d); // undefined undefined
 ```
 
-### Strange result: null vs 0
+#### Strange result: null vs 0
 
 ```js
 alert(null > 0); //  false
@@ -517,7 +596,7 @@ alert(null == 0); //  false
 alert(null >= 0); //  true
 ```
 
-### An incomparable undefined
+#### An incomparable undefined
 
 ```js
 alert(undefined > 0); // false
@@ -543,94 +622,642 @@ alert(id1 == id2); // false
 
 - used to store `collections of data` and `more complex entities`
 
-## Checking Data Types and Casting
+| Type            | Description                   | Example                                 |
+| --------------- | ----------------------------- | --------------------------------------- |
+| 🗃️ **Object**   | Collection of key-value pairs | `let person = {name: "Alice"};`         |
+| 📋 **Array**    | Ordered collection of values  | `let colors = ["red", "green"];`        |
+| ⚙️ **Function** | Reusable block of code        | `function greet() { return "Hello!"; }` |
 
-### Checking Data Types
+---
 
-- To check the data type of a certain variable we use the `_typeof_` method.
-  **Example:**
+## ✅ 1. **What is Type Coercion / Type Casting?**
 
-```js
-console.log(typeof "Asabeneh"); // string
-console.log(typeof 10); // number
-console.log(typeof 3.14); // number
-console.log(typeof true); // boolean
-console.log(typeof false); // boolean
-console.log(typeof NaN); // number
-console.log(typeof undefined); // undefined
-console.log(typeof null); // object
-```
+> Type coercion is the process of **converting one data type to another** — either **automatically (implicit)** or **manually (explicit)** in JavaScript.
 
-### Changing Data Type (Casting)
+---
 
-- `Casting`: `Converting one data type to another data type`. We use _parseInt()_, _parseFloat()_, _Number()_, _+ sign_, _str()_
-- `Type coercion` is the `automatic or implicit conversion` of values from one data type to another (such as strings to numbers).
+## 🧠 2. **Why Coercion Happens in JS**
 
-```js
-const value1 = "5";
-const value2 = 9;
-let sum = value1 + value2; //59
+- JavaScript is **dynamically typed** (no type declaration).
+- During operations, JS **coerces types** to make expressions valid.
+- Example:
 
-sum = Number(value1) + value2; //14
+  ```js
+  "5" + 1; // → '51' (number 1 becomes string)
+  ```
 
-alert(6 - "2"); // 4, converts '2' to a number
-alert("6" / "2"); // 3, converts both operands to numbers
-```
+---
 
-#### String to Int
+## 🧱 3. **Types Affected by Coercion**
 
-- parseInt()
-- Number()
-- Plus sign(+)
+| Data Type        | Converts to/from        |
+| ---------------- | ----------------------- |
+| String           | Number, Boolean, Object |
+| Number           | String, Boolean         |
+| Boolean          | Number, String          |
+| Object/Array     | Primitive types         |
+| null / undefined | Special conversions     |
 
-```js
-let num = "10";
-let numInt = parseInt(num);
-console.log(numInt); // 10
-```
+---
+
+## 🔄 4. **Implicit Type Coercion (Automatic)**
+
+JavaScript automatically converts types in expressions.
+
+### 🧪 Examples:
 
 ```js
-let num = "10";
-let numInt = Number(num);
-console.log(numInt); // 10
+"5" + 1; // '51'   → number is coerced to string
+"5" - 1; // 4      → string is coerced to number
+true + 1; // 2      → true becomes 1
+false == 0; // true   → boolean is coerced to number
+null == undefined; // true → special case
 ```
+
+---
+
+## ✋ 5. **Explicit Type Casting (Manual)**
+
+You manually convert the type using functions or operators.
+
+### 🧪 Convert to String:
 
 ```js
-let num = "10";
-let numInt = +num;
-console.log(numInt); // 10
+String(123)(
+  // '123'
+  123
+).toString(); // '123'
+true + ""; // 'true' (coerced)
 ```
 
-#### String to Float
-
-- parseFloat()
-- Number()
-- Plus sign(+)
+### 🧪 Convert to Number:
 
 ```js
-let num = "9.81";
-let numFloat = parseFloat(num);
-console.log(numFloat); // 9.81
+Number("123") + // 123
+  "123"; // 123
+parseInt("12.3"); // 12
+parseFloat("12.3"); // 12.3
 ```
+
+### 🧪 Convert to Boolean:
 
 ```js
-let num = "9.81";
-let numFloat = Number(num);
-console.log(numFloat); // 9.81
+Boolean(1); // true
+!!"hello"; // true
+!!""; // false
 ```
+
+---
+
+## 📊 6. **Truthy vs Falsy (Boolean Coercion)**
+
+| **Falsy values**           | Boolean(value) → `false` |
+| -------------------------- | ------------------------ |
+| `false`, `0`, `''`, `null` | ✅                       |
+| `undefined`, `NaN`         | ✅                       |
+
+Everything else is **truthy** (including `'0'`, `[]`, `{}`).
+
+---
+
+## 🔍 7. **Object to Primitive Coercion**
+
+When you use objects in expressions, JS tries to convert them to primitive:
+
+### Steps JS Follows:
+
+1. `valueOf()` — try to get primitive
+2. `toString()` — fallback if valueOf fails
 
 ```js
-let num = "9.81";
-let numFloat = +num;
-console.log(numFloat); // 9.81
+[1, 2] + [3, 4]; // '1,23,4'
+{
+}
++[]; // 0
 ```
 
-#### Float to Int
+---
 
-- parseInt()
+## ⚠️ 8. **Abstract Equality (`==`) vs Strict (`===`)**
+
+- `==` → uses type coercion
+- `===` → no coercion, compares type & value
 
 ```js
-let num = 9.81;
-let numInt = parseInt(num);
-console.log(numInt); // 9
+"5" == 5; // true   → coerced
+"5" === 5; // false  → no coercion
+null == undefined; // true → exception
 ```
+
+> 🔥 **Always prefer `===`** unless you know coercion rules in depth.
+
+---
+
+## 📘 9. **Real-World Scenarios**
+
+### ✅ Form Inputs (string to number)
+
+```js
+const input = "25";
+const age = Number(input); // 25
+```
+
+### ✅ Toggle State (boolean coercion)
+
+```js
+const isLoggedIn = !!sessionStorage.getItem("token");
+```
+
+### ✅ Nullish Check
+
+```js
+if (userInput == null) {
+  // catches both null and undefined
+}
+```
+
+---
+
+## 🚫 10. Common Pitfalls
+
+| Expression    | Why It Behaves That Way                                        |
+| ------------- | -------------------------------------------------------------- |
+| `[] == false` | `[] → '' → 0`, `false → 0` → `0 == 0` ✅                       |
+| `'' == 0`     | `'' → 0` → `0 == 0` ✅                                         |
+| `null == 0`   | `null` only equals `undefined`, no coercion to 0 ❌            |
+| `NaN == NaN`  | `NaN` is not equal to anything, even itself ❌                 |
+| `!!'0'`       | `'0'` is a non-empty string → truthy → `!!` makes it `true` ✅ |
+
+---
+
+## 🧠 11. Summary Cheatsheet
+
+| Conversion         | To Type | Syntax                             |
+| ------------------ | ------- | ---------------------------------- |
+| String → Number    | Number  | `Number('123')`, `+'123'`          |
+| String → Boolean   | Boolean | `!!'hello'` → `true`               |
+| Number → String    | String  | `String(100)`, `100 + ''`          |
+| Boolean → Number   | Number  | `Number(true)` → `1`               |
+| Object → Primitive | Mixed   | Uses `.valueOf()` or `.toString()` |
+
+---
+
+## 🧪 Test it Yourself (DevTools Console)
+
+```js
+console.log("5" + 1); // '51'
+console.log("5" - 1); // 4
+console.log(null + 1); // 1
+console.log([] + []); // ''
+console.log({} + []); // 0
+console.log({} + {}); // NaN
+console.log("" == 0); // true
+```
+
+---
+
+## Special Operators 🎯🔮
+
+#### `typeof` Operator 🏷️
+
+Returns a string indicating the type of the operand.
+
+```javascript
+typeof 42; // "number" 🔢
+typeof "hello"; // "string" 📝
+typeof true; // "boolean" ✅
+typeof undefined; // "undefined" 🚫
+typeof null; // "object" ⚠️ (this is a historical bug in JavaScript)
+typeof {}; // "object" 📦
+typeof []; // "object" 📦 (arrays are objects in JavaScript)
+typeof function () {}; // "function" ⚙️
+```
+
+#### `instanceof` Operator 🧬
+
+Tests whether an object is an instance of a particular class or constructor.
+
+```javascript
+// Class definition
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// Creating instances
+const john = new Person("John");
+const nameStr = "John";
+
+// Testing with instanceof
+john instanceof Person; // true ✅
+nameStr instanceof Person; // false ❌
+john instanceof Object; // true ✅ (all objects inherit from Object)
+```
+
+---
+
+# Most asked interview questions
+
+```js
+let a = 10;
+let b = a;
+b = 20;
+console.log(a);
+```
+
+**Output:** `10`
+**Explanation:** `a` is a **primitive** (number). `b = a` creates a **copy**, not a reference.
+
+---
+
+```js
+let obj1 = { name: "Shubham" };
+let obj2 = obj1;
+obj2.name = "Salunkhe";
+console.log(obj1.name);
+```
+
+**Output:** `"Salunkhe"`
+**Explanation:** `obj1` and `obj2` point to the **same reference** in memory.
+
+---
+
+```js
+let arr1 = [1, 2];
+let arr2 = [...arr1];
+arr2.push(3);
+console.log(arr1.length);
+```
+
+**Output:** `2`
+**Explanation:** `arr2` is a **shallow copy** using the spread operator. Original array (`arr1`) is unchanged.
+
+---
+
+```js
+const person = { name: "Shubham" };
+Object.freeze(person);
+person.name = "Salunkhe";
+console.log(person.name);
+```
+
+**Output:** `"Shubham"`
+**Explanation:** `Object.freeze` makes the object **immutable**—modifications are ignored.
+
+---
+
+```js
+let x = null;
+console.log(typeof x);
+```
+
+**Output:** `"object"`
+**Explanation:** Quirk in JavaScript. Though `null` is a primitive, `typeof null` returns `"object"`.
+
+---
+
+```js
+const sym1 = Symbol("id");
+const sym2 = Symbol("id");
+console.log(sym1 === sym2);
+```
+
+**Output:** `false`
+**Explanation:** Each `Symbol` is **unique**, even with the same description.
+
+---
+
+```js
+let obj = { a: 1 };
+let key = "a";
+key = { b: 2 };
+obj[key] = 3;
+console.log(obj);
+```
+
+**Output:** `{ a: 1, "[object Object]": 3 }`
+**Explanation:** Object keys are **converted to strings** when non-primitive keys (like objects) are used.
+
+---
+
+```js
+console.log("5" + 3);
+```
+
+**Output:** `'53'`
+**Explanation:** `+` with string causes **implicit coercion to string**.
+
+---
+
+```js
+console.log("5" - 3);
+```
+
+**Output:** `2`
+**Explanation:** `-` causes **implicit coercion to number**.
+
+---
+
+```js
+console.log(true + false);
+```
+
+**Output:** `1`
+**Explanation:** `true → 1`, `false → 0` during numeric coercion.
+
+---
+
+```js
+console.log("10" * "2");
+```
+
+**Output:** `20`
+**Explanation:** `*` triggers **numeric coercion** for both strings.
+
+---
+
+```js
+console.log(1 + "1" - 1);
+```
+
+**Output:** `10`
+**Explanation:**
+
+- `1 + '1' → '11'` (string)
+- `'11' - 1 → 10`
+
+---
+
+```js
+console.log(null + 1);
+```
+
+**Output:** `1`
+**Explanation:** `null` coerces to `0`.
+
+---
+
+```js
+console.log(undefined + 1);
+```
+
+**Output:** `NaN`
+**Explanation:** `undefined` coerces to `NaN`.
+
+---
+
+```js
+console.log([] == 0);
+```
+
+**Output:** `true`
+**Explanation:**
+
+- `[] → '' → 0`
+- `0 == 0 → true`
+
+---
+
+```js
+console.log([] + {});
+```
+
+**Output:** `"[object Object]"`
+**Explanation:**
+
+- `[]` → `""`, `{}` → `"[object Object]"`
+- `"" + "[object Object]" → "[object Object]"`
+
+---
+
+```js
+console.log({} + []);
+```
+
+**Output:** `0` (in browser dev console) or `"[object Object]"` in strict environments
+**Explanation:** Ambiguous depending on execution context; can be parsed as empty block + `[] → 0`.
+
+---
+
+Here are the **most asked output-based JavaScript interview questions** on the topics **`typeof`** and **`instanceof`**, with brief explanations:
+
+---
+
+```js
+console.log(typeof null);
+```
+
+**Output:** `"object"`
+**Explanation:** A well-known JavaScript bug. `null` is a primitive, but `typeof null` returns `"object"`.
+
+---
+
+```js
+console.log(typeof NaN);
+```
+
+**Output:** `"number"`
+**Explanation:** `NaN` stands for "Not a Number", but it's actually of type `"number"`.
+
+---
+
+```js
+console.log(typeof []);
+```
+
+**Output:** `"object"`
+**Explanation:** Arrays are of type `"object"` in JavaScript.
+
+---
+
+```js
+console.log(typeof function () {});
+```
+
+**Output:** `"function"`
+**Explanation:** `typeof` returns `"function"` only for functions.
+
+---
+
+```js
+console.log(typeof typeof 1);
+```
+
+**Output:** `"string"`
+**Explanation:** `typeof 1` returns `"number"`, and `typeof "number"` returns `"string"`.
+
+---
+
+```js
+console.log(typeof undefinedVar);
+```
+
+**Output:** `"undefined"`
+**Explanation:** `typeof` doesn’t throw an error for undeclared variables—it returns `"undefined"`.
+
+---
+
+```js
+console.log([] instanceof Array);
+```
+
+**Output:** `true`
+**Explanation:** `[]` is an instance of `Array`.
+
+---
+
+```js
+console.log([] instanceof Object);
+```
+
+**Output:** `true`
+**Explanation:** Arrays inherit from `Object`.
+
+---
+
+```js
+console.log(null instanceof Object);
+```
+
+**Output:** `false`
+**Explanation:** `null` is a primitive, not an instance of anything.
+
+---
+
+```js
+function Person() {}
+let p = new Person();
+console.log(p instanceof Person);
+```
+
+**Output:** `true`
+**Explanation:** `p` is created using `new Person()`, so it's an instance of `Person`.
+
+---
+
+```js
+console.log(new String("hello") instanceof String);
+```
+
+**Output:** `true`
+**Explanation:** `new String()` creates a String object (not a primitive).
+
+---
+
+```js
+console.log("hello" instanceof String);
+```
+
+**Output:** `false`
+**Explanation:** `"hello"` is a **primitive**, not a String object.
+
+---
+
+```js
+console.log(parseInt("10px"));
+```
+
+**Output:** `10`
+**Explanation:** `parseInt` stops parsing at the first non-digit character.
+
+---
+
+```js
+console.log(Number("10px"));
+```
+
+**Output:** `NaN`
+**Explanation:** `Number()` needs the entire string to be valid.
+
+---
+
+```js
+console.log(0.1 + 0.2 === 0.3);
+```
+
+**Output:** `false`
+**Explanation:** Due to floating point precision, `0.1 + 0.2` equals `0.30000000000000004`.
+
+---
+
+```js
+console.log((12345).toString(2));
+```
+
+**Output:** `"11000000111001"`
+**Explanation:** Converts number to binary string.
+
+---
+
+```js
+console.log(isNaN("abc"));
+```
+
+**Output:** `true`
+**Explanation:** `"abc"` can’t be coerced to number, so `isNaN()` returns true.
+
+---
+
+```js
+console.log(Boolean("false"));
+```
+
+**Output:** `true`
+**Explanation:** Non-empty strings are **truthy**, even `"false"`.
+
+---
+
+```js
+console.log(!!"");
+```
+
+**Output:** `false`
+**Explanation:** `""` is falsy; double negation turns it into `false`.
+
+---
+
+```js
+console.log(Boolean([]));
+```
+
+**Output:** `true`
+**Explanation:** All objects, including empty arrays and objects, are **truthy**.
+
+---
+
+```js
+console.log(isNaN("hello"));
+```
+
+**Output:** `true`
+**Explanation:** `"hello"` can’t be coerced to a number, so it’s `NaN`.
+
+---
+
+```js
+console.log(Number("hello"));
+```
+
+**Output:** `NaN`
+**Explanation:** Invalid number conversion.
+
+---
+
+```js
+console.log(isNaN(undefined));
+```
+
+**Output:** `true`
+**Explanation:** `undefined → NaN → isNaN(NaN) → true`
+
+---
+
+```js
+console.log(Number(undefined));
+```
+
+**Output:** `NaN`
+**Explanation:** `undefined` can’t be converted to a number.
+
+---

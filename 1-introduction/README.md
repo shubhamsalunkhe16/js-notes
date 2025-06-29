@@ -12,17 +12,15 @@
   - `"Chakra" - in IE`
   - `"JavaScriptCore", "Nitro" and "SquirrelFish" - in Safari`, etc
 
-# Why is it called JavaScript?
-
-- It initially had another name: `LiveScript`
-
-* But `Java` was very popular at that time, so it was decided that positioning a new language as a `younger brother of Java` would help
+---
 
 # How do engines (translator) work?
 
 ```
 parse(read)  =>  compiles(translate)  =>  run
 ```
+
+---
 
 # How to link with HTML ?
 
@@ -46,6 +44,8 @@ parse(read)  =>  compiles(translate)  =>  run
   <script src="path/to/script.js"></script>
   ```
 
+---
+
 # Async Vs Defer In Javascript
 
 ## `async` attribute
@@ -58,11 +58,16 @@ parse(read)  =>  compiles(translate)  =>  run
 
 ![async_and_defer](./images/async_and_defer.png)
 
-## Which one to use?
+## ✅ Best Practice Summary
 
-- `async` attribute does not guarantee the order of execution of scripts but `defer` does
+| Use Case                     | Recommended Method      |
+| ---------------------------- | ----------------------- |
+| DOM-dependent scripts        | `<script defer>`        |
+| Independent/external scripts | `<script async>`        |
+| Fallback/simple HTML         | End of `<body>`         |
+| Critical early scripts       | Avoid blocking `<head>` |
 
-- So for this, we can use an alternative solution which is to use the `<script>` tag just before the `<body>` tag of the HTML file.
+---
 
 # What is “use strict” ?
 
@@ -97,6 +102,8 @@ function myFunction() {
 ```
 
 - `Modern JS` supports “classes” and “modules” – advanced language structures, that `enable use strict automatically`. So we don’t need to add the "use strict" directive, if we use them.
+
+---
 
 # Alert, Prompt and Confirm
 
@@ -133,6 +140,8 @@ let isBoss = confirm("Are you the boss?");
 alert(isBoss); // true if OK is pressed
 ```
 
+---
+
 # Timing Events
 
 - The window object allows execution of code at `specified time intervals`.
@@ -163,16 +172,58 @@ alert(isBoss); // true if OK is pressed
 
 <br />
 
-# Web Worker
+---
 
-> When `executing scripts` in an HTML page, the page becomes `unresponsive until the script is finished`.
+## 🔄 How JavaScript Sees Code
 
-- A `web worker` is a JavaScript that `runs in the background, independently of other scripts, without affecting the performance` of the page. You can continue to do whatever you want: clicking, selecting things, etc., while the web worker runs in the background.
+JavaScript processes our code in multiple phases:
 
-- Since web workers are `in external files`, they `do not have access` to the following JavaScript objects：
+<div align="center">
 
-  - The `window` object
-  - The `document` object
-  - The `parent` object
+```
+┌─────────────┐     ┌─────────┐     ┌─────────────┐     ┌──────────┐
+│  TOKENIZING  │ → │  PARSING  │ → │ INTERPRETING │ → │ EXECUTION │
+└──────┬──────┘     └────┬────┘     └──────┬──────┘     └─────┬────┘
+       │                 │                  │                  │
+       ▼                 ▼                  ▼                  ▼
+┌──────────────┐  ┌───────────────┐  ┌────────────────┐  ┌───────────────┐
+│ Break code   │  │ Create AST    │  │ Convert to     │  │ Run the code  │
+│ into tokens  │  │ (Abstract     │  │ machine code   │  │ line by line  │
+│              │  │ Syntax Tree)  │  │                │  │               │
+└──────────────┘  └───────────────┘  └────────────────┘  └───────────────┘
+```
 
-<br />
+</div>
+
+### 1️⃣ Tokenizing
+
+- JavaScript breaks down the code into individual tokens
+- Tokens are the smallest units of code like keywords, operators, identifiers
+- Validates that these tokens follow ECMAScript syntax rules
+
+For example, `let name = "John";` becomes tokens:
+
+- Keyword: `let`
+- Identifier: `name`
+- Operator: `=`
+- String literal: `"John"`
+- Semicolon: `;`
+
+### 2️⃣ Parsing
+
+- Tokens are organized into a tree structure called Abstract Syntax Tree (AST)
+- AST represents the grammatical structure of the code
+- It helps JavaScript understand how the tokens relate to each other
+
+### 3️⃣ Interpreting (Compiling)
+
+- The JavaScript engine converts the AST into machine code
+- In modern engines, this includes Just-In-Time (JIT) compilation for better performance
+
+### 4️⃣ Execution
+
+- The compiled code is executed line by line
+- Memory is allocated for variables
+- Operations are performed as specified
+
+---

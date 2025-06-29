@@ -1,758 +1,1615 @@
-# Objects
+## 📘 Introduction to Objects
 
-- used to `store keyed collections` of various data
+- Objects are one of the most fundamental and powerful concepts in JavaScript.
+- Unlike primitive data types (strings, numbers, booleans), objects allow you to store collections of data and more complex entities.
 
-- A property is a `key: value` pair
+**🤔 Why Objects?**
 
-- `key is a string`, and `value can be anything`
+- 📦 Group related data together
+- 🌍 Represent real-world entities in code
+- 🗄️ Store complex data structures
+- 🧩 Enable object-oriented programming concepts
 
-### empty object can be created using one of two syntaxes:
+---
 
-```js
-let user = new Object(); // "object constructor" syntax
-let user = {}; // "object literal" syntax
+## 🔷 JavaScript Objects
 
+In JavaScript, an object is a collection of **key-value pairs**, where:
+
+- Each **key** (also called property) is a string or symbol
+- Each **value** can be any JavaScript data type (primitives, functions, or even other objects)
+
+---
+
+## 🛠️ Create Objects with Literal Syntax
+
+The simplest way to create an object is using the **object literal syntax** with curly braces `{}`:
+
+```javascript
+// Empty object
+let emptyObject = {};
+
+// Object with properties
+let person = {
+  name: "John",
+  age: 30,
+  isEmployed: true,
+};
+```
+
+---
+
+## 🔑 Accessing Object Properties
+
+There are two main ways to access object properties:
+
+1. **Dot Notation** (most common) ⭐
+
+```javascript
+let person = {
+  name: "John",
+  age: 30,
+};
+
+console.log(person.name); // "John"
+console.log(person.age); // 30
+```
+
+2. **Bracket Notation** (useful for dynamic keys or keys with special characters) 🔲
+
+```javascript
+console.log(person["name"]); // "John"
+console.log(person["age"]); // 30
+```
+
+### 🧠 Knowledge Check:
+
+What will be the output of the following code?
+
+```javascript
+const book = {
+  title: "JavaScript: The Good Parts",
+  author: "Douglas Crockford",
+  year: 2008,
+};
+
+console.log(book.title);
+console.log(book["author"]);
+```
+
+<details>
+<summary>✅ Answer</summary>
+<pre>
+"JavaScript: The Good Parts"
+"Douglas Crockford"
+</pre>
+</details>
+
+---
+
+## ➕ Adding New Property to Object
+
+You can add new properties to an existing object at any time:
+
+```javascript
 let user = {
-  // an object
-  name: "John", // by key "name" store value "John"
-  age: 30, // by key "age" store value 30
-  "likes birds": true, // multiword property name must be quoted
-};
-```
-
-### To access a property
-
-- dot notation: `obj.property`
-- Square brackets notation `obj["property"]`
-
-```js
-alert(user.name); // John
-alert(user.age); // 30
-OR;
-alert(user["likes birds"]); // true
-```
-
-- `add a property`
-
-```js
-user.isAdmin = true;
-```
-
-- To `remove a property`, use the `delete` operator
-
-```js
-delete user.age;
-```
-
-### Computed properties
-
-- can use `square brackets in an object literal`, when creating an object. That’s called `computed properties`
-
-```js
-let fruit = "apple";
-
-let bag = {
-  [fruit]: 5, // the name of the property is taken from the variable fruit
-  [fruit + "Juice"]: 2, // bag.appleJuice = 5
+  name: "John",
+  age: 30,
 };
 
-alert(bag.apple); // 5 if fruit="apple"
+// Adding new properties
+user.email = "john@example.com";
+user["phone"] = "555-1234";
+
+console.log(user);
+// Output: {name: "John", age: 30, email: "john@example.com", phone: "555-1234"}
 ```
 
-### Property value shorthand
+---
 
-```js
-function makeUser(name, age) {
+## 🔣📌 Keys With Special Characters
+
+When property names contain spaces or special characters, you must use bracket notation:
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+  "user id": "U12345", // 👈 Special character in key
+  "home-address": "123 Main St", // 👈 Special character in key
+};
+
+// Accessing properties with special characters
+console.log(user["user id"]); // "U12345"
+console.log(user["home-address"]); // "123 Main St"
+
+// ⚠️ This would NOT work:
+// console.log(user.user id); // SyntaxError
+// console.log(user.home-address); // Will evaluate as user.home minus address
+```
+
+---
+
+## 🔄 Modifying Existing Property Value
+
+You can change the value of existing properties:
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+};
+
+user.age = 31;
+user["name"] = "John Smith";
+
+console.log(user); // {name: "John Smith", age: 31}
+```
+
+---
+
+## 🗑️ Deleting a Key From Object
+
+The `delete` operator removes a property from an object:
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+  email: "john@example.com",
+};
+
+delete user.email;
+// or delete user["email"];
+
+console.log(user); // {name: "John", age: 30}
+```
+
+### 🧠 Knowledge Check:
+
+What will be the final state of this object?
+
+```javascript
+const product = {
+  name: "Laptop",
+  price: 999,
+  inStock: true,
+  brand: "TechPro",
+};
+
+product.price = 899;
+product.color = "Silver";
+delete product.inStock;
+```
+
+<details>
+<summary>✅ Answer</summary>
+<pre>
+{
+    name: "Laptop",
+    price: 899,
+    brand: "TechPro",
+    color: "Silver"
+}
+</pre>
+</details>
+
+---
+
+## 🔍 Accessing Dynamic Key Value
+
+You can use variables to dynamically access properties:
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+};
+
+const propertyName = "name";
+console.log(user[propertyName]); // "John"
+
+// ⚠️ This is NOT the same:
+console.log(user.propertyName); // undefined (looks for key literally named "propertyName")
+```
+
+---
+
+## 🌟 Create Object With Dynamic Values
+
+You can use square brackets in object literals to create properties with dynamic keys:
+
+```javascript
+const keyName = "dynamicKey";
+const keyValue = "dynamicValue";
+
+const obj = {
+  regularKey: "regularValue",
+  [keyName]: keyValue, // Creates a property named "dynamicKey" with value "dynamicValue"
+};
+
+console.log(obj); // {regularKey: "regularValue", dynamicKey: "dynamicValue"}
+```
+
+Real-world example:
+
+```javascript
+function createUserPreference(setting, value) {
   return {
-    name, // same as name: name
-    age, // same as age: age
-    address: "Pune",
+    [setting]: value, // 🔑 Dynamic key
   };
 }
+
+const darkModePreference = createUserPreference("darkMode", true);
+console.log(darkModePreference); // {darkMode: true}
 ```
 
-### Property names limitations
+---
 
-- `variable cannot` have a name equal to one of the `language-reserved` words like “for”, “let”, “return” etc.
+## 🏗️ Constructor Function To Create Objects
 
-- But for an `object property, there’s no such restriction`
+Constructor functions are used to create multiple objects with the same structure:
 
-```js
-// these properties are all right
-let obj = {
-  for: 1,
-  let: 2,
-  return: 3,
+```javascript
+// Constructor function (by convention, starts with capital letter)
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+// Create new objects using the constructor
+const person1 = new Person("Alice", 25); // 🧍‍♀️
+const person2 = new Person("Bob", 30); // 🧍‍♂️
+
+console.log(person1); // Person {name: "Alice", age: 25}
+console.log(person2); // Person {name: "Bob", age: 30}
+```
+
+The `new` keyword:
+
+1. 🏁 Creates a new empty object
+2. 👉 Sets `this` to point to that object
+3. ⚙️ Executes the constructor function
+4. 🔙 Returns the object (unless the constructor explicitly returns something else)
+
+---
+
+## 📦 Using Object Constructor
+
+The built-in `Object()` constructor can also create objects:
+
+```javascript
+const person = new Object();
+person.name = "Charlie";
+person.age = 35;
+
+console.log(person); // {name: "Charlie", age: 35}
+```
+
+This is less common in modern JavaScript and functionally similar to using object literals.
+
+---
+
+## 🏭 Using Factory Function
+
+Factory functions are regular functions that return new objects:
+
+```javascript
+function createPerson(name, age) {
+  return {
+    name: name,
+    age: age,
+    greet: function () {
+      return `Hello, my name is ${this.name}`;
+    },
+  };
+}
+
+const person1 = createPerson("Alice", 25);
+const person2 = createPerson("Bob", 30);
+
+console.log(person1.greet()); // "Hello, my name is Alice"
+console.log(person2.greet()); // "Hello, my name is Bob"
+```
+
+Factory functions don't require the `new` keyword and can have private variables through closures.
+
+### 🧠 Knowledge Check:
+
+What's the difference between these two approaches?
+
+```javascript
+// Approach 1: Constructor function
+function Car(make, model) {
+  this.make = make;
+  this.model = model;
+}
+const car1 = new Car("Toyota", "Corolla");
+
+// Approach 2: Factory function
+function createCar(make, model) {
+  return {
+    make: make,
+    model: model,
+  };
+}
+const car2 = createCar("Honda", "Civic");
+```
+
+<details>
+<summary>✅ Answer</summary>
+<pre>
+Key differences:
+1. Constructor functions use `new` keyword, factory functions don't
+2. Constructor functions use `this` to assign properties
+3. In constructors, forgetting `new` leads to unexpected behavior
+4. Factory functions can easily implement private variables and closures
+5. Constructor functions are conventionally named with PascalCase
+</pre>
+</details>
+
+---
+
+## ✂️ Object Shorthand
+
+ES6 introduced shorter syntax for defining object properties:
+
+```javascript
+// Old syntax 👵
+const name = "Alice";
+const age = 30;
+
+const user1 = {
+  name: name,
+  age: age,
 };
 
-alert(obj.for + obj.let + obj.return); // 6
-```
-
-- Other types are `automatically converted to strings`
-
-```js
-let obj = {
-  0: "test", // same as "0": "test"
+// ES6 shorthand (when variable name matches property name) 🚀
+const user2 = {
+  name,
+  age,
 };
 
-// both alerts access the same property (the number 0 is converted to string "0")
-alert(obj["0"]); // test
-alert(obj[0]); // test (same property)
+console.log(user1); // {name: "Alice", age: 30}
+console.log(user2); // {name: "Alice", age: 30}
 ```
 
-### Property existence test, “in” operator
+---
 
-```js
-let user = { name: "John", age: 30 };
+## ⚙️ Object Methods
 
-alert("age" in user); // true, user.age exists
-alert("blabla" in user); // false, user.blabla doesn't exist
+Functions stored as object properties are called methods:
+
+```javascript
+const calculator = {
+  // Traditional method syntax
+  add: function (a, b) {
+    return a + b;
+  },
+  // Shorthand method syntax (ES6)
+  subtract(a, b) {
+    return a - b;
+  },
+};
+
+console.log(calculator.add(5, 3)); // 8
+console.log(calculator.subtract(10, 4)); // 6
 ```
 
-### iterate object
+---
 
-- use `for..in` loop
+## Nested Objects
 
-```js
-let user = {
+Objects can contain other objects as property values:
+
+```javascript
+const person = {
+  name: "Alice",
+  age: 30,
+  address: {
+    // 🏠 Nested object
+    street: "123 Main St",
+    city: "Boston",
+    zipCode: "02108",
+    country: "USA",
+  },
+  contacts: {
+    // 📱 Nested object
+    email: "alice@example.com",
+    phone: "555-1234",
+  },
+};
+
+// Accessing nested properties
+console.log(person.address.city); // "Boston"
+console.log(person.contacts.email); // "alice@example.com"
+```
+
+---
+
+## 🔍 The "in" operator
+
+The `in` operator checks if a property exists in an object:
+
+```javascript
+const car = {
+  make: "Toyota",
+  model: "Corolla",
+  year: 2020,
+};
+
+console.log("make" in car); // true
+console.log("color" in car); // false
+```
+
+This is more reliable than checking `undefined`:
+
+```javascript
+// Not reliable if property exists but is explicitly undefined
+console.log(car.color === undefined); // true
+```
+
+---
+
+## 🔄 The for...in loop
+
+The `for...in` loop iterates over all enumerable properties of an object:
+
+```javascript
+const person = {
   name: "John",
   age: 30,
-  isAdmin: true,
+  job: "Developer",
 };
 
-for (let key in user) {
-  // keys
-  alert(key); // name, age, isAdmin
-  // values for the keys
-  alert(user[key]); // John, 30, true
+for (let key in person) {
+  console.log(key + ": " + person[key]);
 }
+// Output:
+// name: John
+// age: 30
+// job: Developer
 ```
 
-### Creating object methods
+**⚠️ Note:** `for...in` is designed for objects, not arrays. For arrays, use `for...of`, `forEach`, or a regular `for` loop.
 
-- `getFullName` is function inside the person object and we call it an object method
-- can use the word `this` to `access the values of different properties of the object itself`
+---
 
-```js
+## 🔑 Object.keys() method
+
+`Object.keys()` returns an array of an object's own enumerable property names:
+
+```javascript
 const person = {
-  firstName: "Asabeneh",
-  lastName: "Yetayeh",
-  age: 25,
-  skills: ["HTML", "CSS", "JavaScript", "React"],
-  isMarried: true,
-  getFullName: function () {
-    // "this" is the "current object"
-    return `${this.firstName} ${this.lastName}`;
-  },
+  name: "John",
+  age: 30,
+  job: "Developer",
 };
 
-console.log(person.getFullName());
-// Asabeneh Yetayeh
+const keys = Object.keys(person);
+console.log(keys); // ["name", "age", "job"]
+
+// Useful for iterating
+keys.forEach((key) => {
+  console.log(key + ": " + person[key]);
+});
 ```
 
-# "this" Keyword
+Similar methods:
 
-## **Global Context**
+- 📊 `Object.values()` - returns an array of values
+- 🔗 `Object.entries()` - returns an array of [key, value] pairs
 
-In the global context or outside of any function, `this` refers to the global object:
+### 🧠 Knowledge Check:
 
-- In browsers, it's the `window` object.
-- In Node.js, it's `global`.
-
-Example:
+What will be the output of the following code?
 
 ```javascript
-console.log(this); // In a browser: window, in Node.js: global
-```
-
----
-
-## **Inside Functions**
-
-### a. **Regular Function**
-
-- `this` refers to the `global object` (`window` in browsers) in non-strict mode. In strict mode, `this` is `undefined`.
-
-Example:
-
-```javascript
-function showThis() {
-  console.log(this); // window (non-strict), undefined (strict mode)
-}
-
-showThis();
-```
-
-### b. **Inside Methods**
-
-When `this` is used inside an object method, it refers to the object that owns the method.
-
-Example:
-
-```javascript
-const obj = {
-  name: "JavaScript",
-  getName: function () {
-    return this.name; // Refers to obj
-  },
+const user = {
+  id: 101,
+  username: "coder123",
+  active: true,
 };
 
-console.log(obj.getName()); // "JavaScript"
-```
+console.log(Object.keys(user).length);
+console.log(Object.values(user)[1]);
 
----
-
-### c. **Arrow Function**
-
-- do not have their own `this`. They inherit `this` from the enclosing context.
-
-Example:
-
-```javascript
-const obj = {
-  name: "JavaScript",
-  showThis: () => {
-    console.log(this); // Refers to the enclosing scope, not obj
-  },
-};
-
-obj.showThis(); // window (or global in Node.js)
-```
-
----
-
-## **Inside Constructors and Classes**
-
-In a constructor function or class, `this` refers to the instance being created.
-
-### Constructor Example:
-
-```javascript
-function Person(name) {
-  this.name = name;
-}
-
-const person = new Person("John");
-console.log(person.name); // "John"
-```
-
-### Class Example:
-
-```javascript
-class Person {
-  constructor(name) {
-    this.name = name;
+for (let prop in user) {
+  if (typeof user[prop] === "boolean") {
+    console.log(prop);
   }
 }
+```
 
-const person = new Person("John");
-console.log(person.name); // "John"
+<details>
+<summary>✅ Answer</summary>
+<pre>
+3
+"coder123"
+"active"
+</pre>
+</details>
+
+---
+
+## 🔗 Object References
+
+In JavaScript, objects are reference types, meaning variables don't store the object itself but a reference to it in memory:
+
+```javascript
+// Two different objects with same content
+const obj1 = { name: "John" };
+const obj2 = { name: "John" };
+
+console.log(obj1 === obj2); // false (different objects in memory)
+
+// Copying a reference
+const obj3 = obj1;
+console.log(obj1 === obj3); // true (same object in memory)
+
+// Modifying through one reference affects all references
+obj3.name = "Alice";
+console.log(obj1.name); // "Alice"
+```
+
+`Note:` When two objects are compare they are compared with the memory location or `reference` they are having not the `values` they are storing.
+
+## 🔄 Object.assign()
+
+`Object.assign()` copies properties from one or more source objects to a target object:
+
+```javascript
+const target = { a: 1, b: 2 };
+const source = { b: 3, c: 4 };
+
+const result = Object.assign(target, source);
+
+console.log(target); // {a: 1, b: 3, c: 4} (target is modified)
+console.log(result); // {a: 1, b: 3, c: 4} (same as target)
+console.log(target === result); // true (same object)
+```
+
+Creating a shallow copy:
+
+```javascript
+const original = { a: 1, b: 2 };
+const copy = Object.assign({}, original);
+
+console.log(copy); // {a: 1, b: 2}
+console.log(original === copy); // false (different objects)
 ```
 
 ---
 
-## **Explicitly Setting `this`**
-
-You can explicitly set the value of `this` using `call`, `apply`, or `bind`.
-
-### a. **call()**
-
-Calls a function with a specified `this` value and arguments.
-
-```javascript
-function greet(greeting) {
-  console.log(`${greeting}, ${this.name}`);
-}
-
-const user = { name: "Alice" };
-greet.call(user, "Hello"); // "Hello, Alice"
-```
-
-### b. **apply()**
-
-Similar to `call()`, but takes arguments as an array.
-
-```javascript
-greet.apply(user, ["Hi"]); // "Hi, Alice"
-```
-
-### c. **bind()**
-
-Returns a new function with a specified `this` value.
-
-```javascript
-const boundGreet = greet.bind(user);
-boundGreet("Welcome"); // "Welcome, Alice"
-```
-
 ---
 
-## **Event Handlers**
+# 📋 Shallow Copy vs. Deep Copy
 
-### a. Default Behavior
+**Shallow Copy** 🌊: Copies only the first level properties
 
-In DOM event handlers, `this` refers to the element that fired the event.
+- `Object.assign()`
+- Spread operator: `{...obj}`
 
-```javascript
-document.querySelector("button").addEventListener("click", function () {
-  console.log(this); // The button element
-});
-```
-
-### b. Arrow Functions in Event Handlers
-
-Arrow functions inherit `this` from the surrounding context.
+**Deep Copy** 🏊‍♂️: Copies all levels of nested objects
 
 ```javascript
-document.querySelector("button").addEventListener("click", () => {
-  console.log(this); // window or global context
-});
-```
-
-### Object Methods
-
-- `Object.assign` : To `copy` an object without modifying the original object
-
-```js
-const person = {
-  firstName: "Asabeneh",
-  city: "Mumbai",
-  getPersonInfo: function () {
-    return `I am ${this.firstName} and I live in ${this.city}`;
+// Object with nested object
+const original = {
+  a: 1,
+  b: {
+    c: 2,
   },
 };
 
-const copyPerson = Object.assign({}, person);
-console.log(copyPerson);
+// 🌊 Shallow copy with Object.assign
+const shallowCopy = Object.assign({}, original);
+
+// 🌊 Shallow copy with spread operator
+const spreadCopy = { ...original };
+
+// Modify nested object in shallow copy
+shallowCopy.b.c = 3;
+console.log(original.b.c); // 3 (affected by change to shallowCopy)
+
+// 🏊‍♂️ Deep copy with structured clone (modern browsers)
+const deepCopy = structuredClone(original);
+deepCopy.b.c = 4;
+console.log(original.b.c); // 3 (unaffected by change to deepCopy)
 ```
 
-#### Getting object keys using Object.keys()
+Other methods for deep copying:
 
-- `Object.keys` : To get the keys or properties of an object as an array
+- `JSON.parse(JSON.stringify(obj))` (with limitations)
+- Libraries like Lodash (`_.cloneDeep()`)
 
-```js
-const keys = Object.keys(copyPerson);
-console.log(keys); //['firstName', 'city', 'getPersonInfo']
+## 📋 JavaScript Shallow vs Deep Copy Cheatsheet
+
+## 📌 Quick Reference Card
+
+```
+🌊 SHALLOW COPY:
+   First level: COPIED (safe to change)
+   Nested objects: SHARED (changes affect both)
+
+🏊‍♂️ DEEP COPY:
+   All levels: COMPLETELY COPIED (fully independent)
 ```
 
-#### Getting object values using Object.values()
+## 🏠 Real-World Analogy: The Notebook Copy
 
-- `Object.values` :To get values of an object as an array
+**Shallow Copy** = Photocopying a notebook with website URLs
 
-```js
-const values = Object.values(copyPerson);
-console.log(values); //['Asabeneh', 'Mumbai', ƒ]
+- You get your own copy of the handwritten notes (first level properties)
+- The URLs still point to the same websites (nested objects)
+- If you cross out a note in your copy, the original stays unchanged
+- If a website changes content, both your copy and original notebook point to the same updated website
+
+**Deep Copy** = Photocopying a notebook AND downloading offline copies of all websites
+
+- You have your own notes AND your own copies of all website content
+- Changes to either set of information are completely independent
+
+## 🛠️ Method Mnemonic:
+
+**S**hallow: **S**pread (`{...obj}`) and a**SS**ign (`Object.assign()`)  
+**D**eep: **D**eep cloning (`structuredClone()`)
+
+## 📊 Visual Reminder:
+
+```
+Original → Shallow Copy      Original → Deep Copy
+   │             │             │           │
+   │             │             │           │
+   ▼             ▼             ▼           ▼
+  Name           Name          Name        Name
+  Age            Age           Age         Age
+   │             │             │           │
+   └────┐   ┌────┘             │           │
+        ▼   ▼                  ▼           ▼
+      Address              Address     Address
+      (SHARED)              (Own)       (Own)
 ```
 
-#### Getting object keys and values using Object.entries()
+## 💻 Code Examples
 
-- `Object.entries` :To get the keys and values in an array
-
-```js
-const entries = Object.entries(copyPerson);
-console.log(entries);
-```
-
-```sh
-[
-    ['firstName', 'Asabeneh'],
-    ['city', 'Mumbai'],
-    ['getPersonInfo', ƒ]
-]
-```
-
-#### Checking properties using hasOwnProperty()
-
-- `hasOwnProperty`: To check if a specific key or property exist in an object
-
-```js
-console.log(copyPerson.hasOwnProperty("name"));
-console.log(copyPerson.hasOwnProperty("score"));
-```
-
-### Object references and copying
-
-- objects are stored and copied `by reference`
-- where as primitive values are always copied `as a whole value`
-
-```js
-// we put a copy of message into phrase
-let message = "Hello!";
-let phrase = message;
-```
-
-- result we have `two independent variables`, if we change in `phrase`,it will not affect `message`
-
-![variable-copy-value](./images/variable-copy-value.png)
-
-- Objects are `not` like that
-
-```js
-let user = { name: "John" };
-
-let admin = user; // copy the reference
-
-admin.name = "Pete"; // changed by the "admin" reference
-
-alert(user.name); // 'Pete', changes are seen from the "user" reference
-```
-
-- When an `object variable is copied, the reference is copied`, but the object itself is `not duplicated`
-- one object, but now with `two variables that reference it`
-
-![variable-copy-value](./images/variable-copy-reference.png)
-
-#### Comparison by reference
-
-```js
-// a and b reference the same object
-let a = {};
-let b = a; // copy the reference
-
-alert(a == b); // true, both variables reference the same object
-alert(a === b); // true
-
-// two independent objects
-let a = {};
-let b = {}; // two independent objects
-
-alert(a == b); // false
-alert(a === b); // false
-```
-
-#### NOTE :
-
-- `const` objects can be `modified`
-
-```js
+```javascript
+// Original object
 const user = {
-  name: "John",
-};
-
-user.name = "Pete"; // (*)
-
-alert(user.name); // Pete
-```
-
-- The value of `user is constant`, it must always `reference the same object`, but `properties are free to change`
-
-### Cloning and merging, Object.assign
-
-1. can create a `new object` and `replicate the structure of the existing one`
-
-```js
-let user = {
-  name: "John",
-  age: 30,
-};
-
-let clone = {}; // the new empty object
-
-// let's copy all user properties into it
-for (let key in user) {
-  clone[key] = user[key];
-}
-
-// now clone is a fully independent object with the same content
-clone.name = "Pete"; // changed the data in it
-
-alert(user.name); // still John in the original object
-```
-
-2. We can also use the method `Object.assign`
-   The syntax is:
-
-```js
-Object.assign(dest, ...sources);
-```
-
-- The first argument dest is a `target object`
-- Further arguments is a `list of source objects`
-
-#### merge objects
-
-```js
-let user = { name: "John" };
-
-let permissions1 = { canView: true };
-let permissions2 = { canEdit: true };
-
-// copies all properties from permissions1 and permissions2 into user
-Object.assign(user, permissions1, permissions2);
-
-// now user = { name: "John", canView: true, canEdit: true }
-```
-
-#### clone objects
-
-```js
-let user = {
-  name: "John",
-  age: 30,
-};
-
-let clone = Object.assign({}, user);
-
-alert(clone.name); // John
-alert(clone.age); // 30
-```
-
-### Nested cloning
-
-```js
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50,
+  name: "Alex",
+  age: 28,
+  settings: {
+    darkMode: true,
+    notifications: false,
   },
 };
 
-let clone = Object.assign({}, user);
+// Shallow copy
+const shallowUser = { ...user };
+shallowUser.name = "Taylor"; // Only affects copy
+shallowUser.settings.darkMode = false; // Affects BOTH objects
 
-alert(user.sizes === clone.sizes); // true, same object
-
-// user and clone share sizes
-user.sizes.width = 60; // change a property from one place
-alert(clone.sizes.width); // 60, get the result from the other one
+// Deep copy
+const deepUser = structuredClone(user);
+deepUser.name = "Jordan"; // Only affects copy
+deepUser.settings.darkMode = false; // Only affects copy
 ```
 
-- if it’s an nested object, then replicate its structure as well. That is called a `deep cloning` or `structured cloning`
-- There’s `structuredClone` method that implements deep cloning
+## 🧠 Remember:
 
-```js
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50,
+- A shallow copy creates new **containers** but shares the **contents**
+- A deep copy duplicates both the **containers** AND the **contents**
+- First level changes in shallow copies are safe; nested changes affect both objects
+
+---
+
+### 🧠 Knowledge Check:
+
+What will be logged to the console?
+
+```javascript
+const config = {
+  theme: "dark",
+  settings: {
+    notifications: true,
+    sound: false,
   },
 };
 
-let clone = structuredClone(user);
+const backupConfig = Object.assign({}, config);
+backupConfig.theme = "light";
+backupConfig.settings.notifications = false;
 
-alert(user.sizes === clone.sizes); // false, different objects
-
-// user and clone are totally unrelated now
-user.sizes.width = 60; // change a property from one place
-alert(clone.sizes.width); // 50, not related
+console.log(config.theme);
+console.log(config.settings.notifications);
 ```
 
-- use `Object.assign` for the so-called `shallow copy` (nested objects are copied by reference) or a `deep cloning` function `structuredClone` or use a `custom cloning implementation`
+<details>
+<summary>✅ Answer</summary>
+<pre>
+"dark"
+false
+</pre>
+<p>Explanation: The object's top-level property (theme) is copied by value, but the nested object (settings) is copied by reference, so changes to backupConfig.settings also affect config.settings.</p>
+</details>
 
-### Constructor function
+---
 
-- technically are `regular functions`
-- There are two conventions though:
+## 🔄 Convert an Object to an Array
 
-  - starts with `capital letter`
-  - should be executed only with `new` operator
+Use these methods to convert objects to arrays:
 
-```js
-function User(name) {
-  this.name = name;
-  this.isAdmin = false;
-}
+1. **Object.keys()** - Array of keys 🔑
 
-let user = new User("Jack");
-
-alert(user.name); // Jack
-alert(user.isAdmin); // false
+```javascript
+const user = { id: 1, name: "John", age: 30 };
+const keys = Object.keys(user);
+console.log(keys); // ["id", "name", "age"]
 ```
 
-- When a function is executed with new, it does the following steps:
+2. **Object.values()** - Array of values 📊
 
-  1. A new `empty object is created` and `assigned` to this
-  2. The function body executes. Usually it `modifies this`, `adds new properties` to it
-  3. The `value of this` is returned
-
-```js
-function User(name) {
-  // this = {};  (implicitly)
-
-  // add properties to this
-  this.name = name;
-  this.isAdmin = false;
-
-  // return this;  (implicitly)
-}
+```javascript
+const values = Object.values(user);
+console.log(values); // [1, "John", 30]
 ```
 
-- main purpose of constructors – `to implement reusable object creation code`
+3. **Object.entries()** - Array of [key, value] pairs 🔗
 
-#### Omitting parentheses
-
-```js
-// let user = new User;  // <-- no parentheses
-// same as
-// let user = new User();
+```javascript
+const entries = Object.entries(user);
+console.log(entries);
+// [["id", 1], ["name", "John"], ["age", 30]]
 ```
 
-### Optional chaining '?.'
+## 🔄 Convert Map or Array to Object
 
-- The `non-existing property` problem
+**Array to Object** using `Object.fromEntries()`:
 
-```js
-let user = {}; // a user without "address" property
+```javascript
+const entries = [
+  ["name", "John"],
+  ["age", 30],
+  ["job", "Developer"],
+];
 
-alert(user.address.street); // Error!
-// to fix it
-alert(user.address ? user.address.street : undefined);
-
-// document.querySelector('.elem') is null if there's no element
-let html = document.querySelector(".elem").innerHTML; // error if it's null
-// to fix it
-let html = document.querySelector(".elem")
-  ? document.querySelector(".elem").innerHTML
-  : null;
+const obj = Object.fromEntries(entries);
+console.log(obj); // {name: "John", age: 30, job: "Developer"}
 ```
 
-- For more deeply nested properties, it becomes even uglier, as more repetitions are required.
+**Map to Object**:
 
-```js
-let user = {}; // user has no address
-
-alert(
-  user.address ? (user.address.street ? user.address.street.name : null) : null
-);
-// OR
-alert(user.address && user.address.street && user.address.street.name);
-```
-
-#### Optional chaining
-
-- The optional chaining `?.` stops the evaluation if the value before `?.` is `undefined or null` and returns `undefined`
-
-```js
-let user = {}; // user has no address
-
-alert(user?.address?.street); // undefined (no error)
-```
-
-- `variable before ?. must be declared`
-
-```js
-//if not, ReferenceError: user is not defined
-user?.address;
-```
-
-#### The optional chaining ?. syntax has three forms:
-
-1. `obj?.prop` – returns obj.prop if obj exists, otherwise `undefined`
-2. `obj?.[prop] OR obj?.[index]` – returns obj[prop] OR obj[index] if obj exists, otherwise `undefined`
-
-```js
-let user1 = {
-  firstName: "John",
-  skills: ["html", "css", "js"],
-};
-
-let user2 = null;
-
-alert(user1?.["firstName"]); // John
-alert(user2?.["firstName"]); // undefined
-alert(user1?.["skills"]?.[0]); // html
-alert(user2?.["skills"]?.[0]); // undefined
-```
-
-3. `obj.method?.()` – calls obj.method() if obj.method exists, otherwise returns `undefined`
-
-```js
-let userAdmin = {
-  admin() {
-    alert("I am admin");
-  },
-};
-
-let userGuest = {};
-
-userAdmin.admin?.(); // I am admin
-
-userGuest.admin?.(); // nothing happens (no such method)
-```
-
-# Map
-
-- `a collection of keyed values`.
-- The differences from a regular Object:
-  - `Any keys`, `objects` can be keys.
-  - Additional convenient methods, the `size` property.
-- Methods and properties are:
-  - `new Map()` – creates the map.
-  - `map.set(key, value)` – stores the value by the key.
-  - `map.get(key)` – returns the value by the key, undefined if key doesn’t exist in map.
-  - `map.has(key)` – returns true if the key exists, false otherwise.
-  - `map.size` – returns the current element count.
-  - `map.delete(key)` – removes the element (the key/value pair) by the key.
-  - `map.clear()` – removes everything from the map.
-
-```js
-let map = new Map();
-
-map.set("1", "str1"); // a string key
-map.set(1, "num1"); // a numeric key
-map.set(true, "bool1"); // a boolean key
-
-// remember the regular Object? it would convert keys to string
-// Map keeps the type, so these two are different:
-alert(map.get(1)); // 'num1'
-alert(map.get("1")); // 'str1'
-
-alert(map.size); // 3
-
-alert(map.get("2")); // false
-```
-
-- Map can also use objects as keys.
-
-```js
-let john = { name: "John" };
-
-// for every user, let's store their visits count
-let visitsCountMap = new Map();
-
-// john is the key for the map
-visitsCountMap.set(john, 123);
-
-alert(visitsCountMap.get(john)); // 123
-```
-
-- Every map.set call returns the map itself, so we can “chain” the calls
-
-```js
-map.set("1", "str1").set(1, "num1").set(true, "bool1");
-```
-
-## Iteration over Map
-
-- For looping over a map, there are 3 methods:
-
-- `map.keys()` – returns an iterable for keys,
-- `map.values()` – returns an iterable for values,
-- `map.entries()` – returns an iterable for entries [key, value], it’s used by default in for..of.
-
-```js
-let recipeMap = new Map([
-  ["cucumber", 500],
-  ["tomatoes", 350],
-  ["onion", 50],
+```javascript
+const map = new Map([
+  ["name", "John"],
+  ["age", 30],
 ]);
 
-// iterate over keys (vegetables)
-for (let vegetable of recipeMap.keys()) {
-  alert(vegetable); // cucumber, tomatoes, onion
+const obj = Object.fromEntries(map);
+console.log(obj); // {name: "John", age: 30}
+```
+
+---
+
+## 🧊 Immutability with freeze()
+
+`Object.freeze()` prevents an object from being modified:
+
+```javascript
+const settings = {
+  theme: "dark",
+  notifications: true,
+};
+
+Object.freeze(settings);
+
+// ❄️ These will have no effect in strict mode (or silently fail otherwise)
+settings.theme = "light"; // Cannot modify properties
+settings.sound = true; // Cannot add properties
+delete settings.notifications; // Cannot delete properties
+
+console.log(settings); // {theme: "dark", notifications: true}
+
+// Check if an object is frozen
+console.log(Object.isFrozen(settings)); // true
+```
+
+## 🔒 Immutability with seal()
+
+`Object.seal()` prevents adding or deleting properties, but allows modifying existing ones:
+
+```javascript
+const user = {
+  name: "John",
+  age: 30,
+};
+
+Object.seal(user);
+
+user.name = "Jane"; // ✅ Can modify existing properties
+user.location = "USA"; // ❌ Cannot add new properties
+delete user.age; // ❌ Cannot delete properties
+
+console.log(user); // {name: "Jane", age: 30}
+
+// Check if an object is sealed
+console.log(Object.isSealed(user)); // true
+```
+
+## 🔍 The hasOwn() Method
+
+`Object.hasOwn()` checks if an object has a specific property (replacing the older `hasOwnProperty` method):
+
+```javascript
+const person = {
+  name: "Alice",
+  age: 30,
+};
+
+console.log(Object.hasOwn(person, "name")); // true
+console.log(Object.hasOwn(person, "gender")); // false
+
+// The older way (still works but less recommended):
+console.log(person.hasOwnProperty("name")); // true
+```
+
+### 🧠 Knowledge Check:
+
+What will this code output?
+
+```javascript
+const config = {
+  darkMode: true,
+  fontSize: 16,
+};
+
+Object.seal(config);
+config.darkMode = false;
+config.newSetting = "value";
+
+console.log(config.darkMode);
+console.log("newSetting" in config);
+console.log(Object.hasOwn(config, "fontSize"));
+```
+
+<details>
+<summary>✅ Answer</summary>
+<pre>
+false
+false
+true
+</pre>
+</details>
+
+---
+
+## 📦 What is Object Destructuring?
+
+Object destructuring is a convenient way to extract multiple properties from objects into individual variables:
+
+```javascript
+const person = {
+  name: "Alice",
+  age: 30,
+  job: "Developer",
+};
+
+// Without destructuring 😕
+const name1 = person.name;
+const age1 = person.age;
+
+// With destructuring ✨
+const { name, age } = person;
+
+console.log(name); // "Alice"
+console.log(age); // 30
+```
+
+```javascript
+const student = {
+  name: "John Williamson",
+  age: 9,
+  std: 3,
+  subjects: ["Maths", "English", "EVS"],
+  parents: {
+    father: "Brown Williamson",
+    mother: "Sophia",
+    email: "john-parents@abcde.com",
+  },
+  address: {
+    street: "65/2, brooklyn road",
+    city: "Carterton",
+    country: "New Zealand",
+    zip: 5791,
+  },
+};
+
+const { name, age, meal = "bread" } = student;
+console.log(name, age, meal); // john williamson, 9 , bread
+
+const { subjects, numberOfSubjects = subjects.length } = student;
+console.log(numberOfSubjects); // 3
+```
+
+## 🏷️ Create a New Variable
+
+You can rename variables during destructuring:
+
+```javascript
+const person = {
+  name: "Alice",
+  age: 30,
+};
+
+// Rename to different variables
+const { name: fullName, age: years } = person;
+
+console.log(fullName); // "Alice"
+console.log(years); // 30
+```
+
+## 🔄 Aliases
+
+This is the same concept as creating new variables with different names:
+
+```javascript
+const product = {
+  productName: "Laptop",
+  price: 999,
+};
+
+// Using aliases
+const { productName: item, price: cost } = product;
+
+console.log(item); // "Laptop"
+console.log(cost); // 999
+```
+
+## 🪆 Nested Object Destructuring
+
+You can destructure nested objects:
+
+```javascript
+const user = {
+  id: 1,
+  name: "Alice",
+  address: {
+    city: "Boston",
+    country: "USA",
+  },
+};
+
+// Destructuring nested objects
+const {
+  name,
+  address: { city, country },
+} = user;
+
+console.log(name); // "Alice"
+console.log(city); // "Boston"
+console.log(country); // "USA"
+```
+
+## 🔄 Destructuring to Function Parameters
+
+Function parameters can use destructuring:
+
+```javascript
+// Without destructuring 😕
+function displayUser(user) {
+  console.log(`${user.name} is ${user.age} years old`);
 }
 
-// iterate over values (amounts)
-for (let amount of recipeMap.values()) {
-  alert(amount); // 500, 350, 50
+// With destructuring ✨
+function displayUserInfo({ name, age }) {
+  console.log(`${name} is ${age} years old`);
 }
 
-// iterate over [key, value] entries
-for (let entry of recipeMap) {
-  // the same as of recipeMap.entries()
-  alert(entry); // cucumber,500 (and so on)
+const user = { name: "Alice", age: 30, job: "Developer" };
+displayUserInfo(user); // "Alice is 30 years old"
+```
+
+## 🔙 Destructure a Function Return Value
+
+You can destructure the object returned by a function:
+
+```javascript
+function getUser() {
+  return {
+    id: 1,
+    name: "Alice",
+    role: "Admin",
+  };
+}
+
+const { id, name, role } = getUser();
+console.log(id); // 1
+console.log(name); // "Alice"
+console.log(role); // "Admin"
+```
+
+## 🔄 Destructuring in Loops
+
+You can use destructuring in loops, especially with `Object.entries()`:
+
+```javascript
+const ratings = {
+  movie1: 4.5,
+  movie2: 3.8,
+  movie3: 5.0,
+};
+
+for (const [movie, rating] of Object.entries(ratings)) {
+  console.log(`${movie}: ${rating}/5 ⭐`);
+}
+// Output:
+// movie1: 4.5/5 ⭐
+// movie2: 3.8/5 ⭐
+// movie3: 5.0/5 ⭐
+```
+
+## ⛓️ Optional Chaining
+
+Optional chaining (`?.`) allows you to safely access deeply nested properties without checking each level:
+
+```javascript
+const user = {
+  name: "Alice",
+  address: {
+    city: "Boston",
+  },
+};
+
+// Without optional chaining (error-prone) 😖
+const country1 = user.address && user.address.country;
+
+// With optional chaining ✨
+const country2 = user.address?.country;
+const zipCode = user.address?.zipCode;
+
+console.log(country2); // undefined (no error)
+console.log(zipCode); // undefined (no error)
+
+// Works with methods too
+console.log(user.getDetails?.()); // undefined (no error if method doesn't exist)
+```
+
+### 🧠 Knowledge Check:
+
+What will the output be?
+
+```javascript
+const data = {
+  user: {
+    profile: {
+      name: "Alice",
+      contact: null,
+    },
+  },
+};
+
+const email = data.user?.profile?.contact?.email;
+const name = data.user?.profile?.name;
+
+console.log(email);
+console.log(name);
+```
+
+<details>
+<summary>✅ Answer</summary>
+<pre>
+undefined
+"Alice"
+</pre>
+</details>
+
+## 💯 Practice Tasks (JavaScript Objects)
+
+### Task 1: Basic Object Operations 🔰
+
+Create an object called `book` with properties for `title`, `author`, and `year`. Then add a new property `genre`, modify the `year`, and delete the `author` property.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+// Create the book object
+const book = {
+  title: "The Great Gatsby",
+  author: "F. Scott Fitzgerald",
+  year: 1925,
+};
+
+// Add genre property
+book.genre = "Classic Fiction";
+
+// Modify year
+book.year = 1926;
+
+// Delete author property
+delete book.author;
+
+console.log(book);
+// Output: {title: "The Great Gatsby", year: 1926, genre: "Classic Fiction"}
+```
+
+</details>
+
+### Task 2: Nested Objects 🪆
+
+Create an object `student` with nested objects for `personalInfo` and `academicInfo`. Access and modify values in the nested objects.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+const student = {
+  id: 101,
+  personalInfo: {
+    name: "Emma",
+    age: 22,
+    contact: {
+      email: "emma@example.com",
+      phone: "555-1234",
+    },
+  },
+  academicInfo: {
+    major: "Computer Science",
+    year: 3,
+    grades: {
+      math: 95,
+      programming: 98,
+      databases: 87,
+    },
+  },
+};
+
+// Access nested properties
+console.log(student.personalInfo.name); // "Emma"
+console.log(student.academicInfo.grades.programming); // 98
+
+// Modify nested values
+student.personalInfo.age = 23;
+student.academicInfo.grades.databases = 92;
+
+console.log(student.personalInfo.age); // 23
+console.log(student.academicInfo.grades.databases); // 92
+```
+
+</details>
+
+### Task 3: Object Constructor and Factory Functions 🏭
+
+Create a `Car` constructor function and a `createCar` factory function that create objects with the same properties. Create two objects using each method.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+// Constructor function
+function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+  this.isRunning = false;
+  this.start = function () {
+    this.isRunning = true;
+    return `${this.make} ${this.model} started`;
+  };
+}
+
+// Factory function
+function createCar(make, model, year) {
+  return {
+    make,
+    model,
+    year,
+    isRunning: false,
+    start() {
+      this.isRunning = true;
+      return `${this.make} ${this.model} started`;
+    },
+  };
+}
+
+// Create objects with constructor
+const car1 = new Car("Toyota", "Camry", 2020);
+const car2 = new Car("Honda", "Accord", 2021);
+
+// Create objects with factory function
+const car3 = createCar("Tesla", "Model 3", 2022);
+const car4 = createCar("Ford", "Mustang", 2019);
+
+console.log(car1.start()); // "Toyota Camry started"
+console.log(car3.start()); // "Tesla Model 3 started"
+```
+
+</details>
+
+### Task 4: Object Methods and References 🔗
+
+Create an original object with a method, then create a shallow copy and modify a property. Observe how the method behaves on both objects.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+// Original object with method
+const calculator = {
+  value: 0,
+  add(num) {
+    this.value += num;
+    return this.value;
+  },
+  subtract(num) {
+    this.value -= num;
+    return this.value;
+  },
+  reset() {
+    this.value = 0;
+    return this.value;
+  },
+};
+
+// Create a shallow copy
+const calculatorCopy = Object.assign({}, calculator);
+
+// Use original
+calculator.add(5);
+calculator.add(10);
+console.log(calculator.value); // 15
+
+// Use copy (has separate value property)
+calculatorCopy.value = 100;
+calculatorCopy.add(50);
+console.log(calculatorCopy.value); // 150
+console.log(calculator.value); // Still 15 (not affected)
+```
+
+</details>
+
+### Task 5: Deep vs Shallow Copy Challenge 🏊‍♂️
+
+Create an object with nested objects, then create both a shallow copy and a deep copy. Modify the nested properties in each copy and observe the results.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+// Original object with nested data
+const company = {
+  name: "TechCorp",
+  founded: 2010,
+  address: {
+    city: "San Francisco",
+    state: "CA",
+    building: {
+      floor: 5,
+      room: 512,
+    },
+  },
+};
+
+// 🌊 Shallow copy
+const shallowCopy = { ...company };
+
+// 🏊‍♂️ Deep copy (using structuredClone for modern browsers)
+const deepCopy = structuredClone(company);
+// Alternative deep copy: JSON.parse(JSON.stringify(company));
+
+// Modify shallow copy's nested property
+shallowCopy.address.city = "New York";
+shallowCopy.address.building.floor = 10;
+
+// Modify deep copy's nested property
+deepCopy.address.city = "Chicago";
+deepCopy.address.building.floor = 20;
+
+console.log("Original:", company.address.city, company.address.building.floor);
+// Original: New York 10 (affected by shallow copy)
+
+console.log(
+  "Shallow Copy:",
+  shallowCopy.address.city,
+  shallowCopy.address.building.floor
+);
+// Shallow Copy: New York 10
+
+console.log(
+  "Deep Copy:",
+  deepCopy.address.city,
+  deepCopy.address.building.floor
+);
+// Deep Copy: Chicago 20
+```
+
+</details>
+
+### Task 6: Object Destructuring and Optional Chaining ⛓️
+
+Use destructuring and optional chaining to safely extract values from a complex nested object.
+
+<details>
+<summary>✅ Solution</summary>
+
+```javascript
+const response = {
+  status: "success",
+  data: {
+    user: {
+      id: 123,
+      username: "codemaster",
+      settings: null,
+      profile: {
+        fullName: "Jane Doe",
+        location: "New York",
+      },
+    },
+    meta: {
+      timestamp: 1635520832,
+      server: "api-server-01",
+    },
+  },
+};
+
+// Destructure with default values
+const { status, data: { user } = {} } = response;
+
+// Destructure nested properties with renaming
+const { username, profile: { fullName: name } = {} } = user;
+
+// Optional chaining for potentially null/undefined paths
+const theme = user.settings?.theme?.color;
+const country = user.profile?.address?.country;
+
+console.log(status); // "success"
+console.log(username); // "codemaster"
+console.log(name); // "Jane Doe"
+console.log(theme); // undefined (safely accessed)
+console.log(country); // undefined (safely accessed)
+```
+
+</details>
+
+### Task 7: Object Freeze vs Seal
+
+Demonstrate the difference between `Object.freeze()` and `Object.seal()` by creating two similar objects and applying these methods to them.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+// Create two similar objects
+const frozenConfig = {
+  theme: "dark",
+  fontSize: 16,
+  animations: true,
+};
+
+const sealedConfig = {
+  theme: "dark",
+  fontSize: 16,
+  animations: true,
+};
+
+// Freeze one object
+Object.freeze(frozenConfig);
+
+// Seal the other object
+Object.seal(sealedConfig);
+
+// Try modifications on both
+try {
+  // Attempts on frozen object
+  frozenConfig.theme = "light"; // Won't work
+  frozenConfig.newProp = "value"; // Won't work
+  delete frozenConfig.animations; // Won't work
+
+  // Attempts on sealed object
+  sealedConfig.theme = "light"; // Will work
+  sealedConfig.newProp = "value"; // Won't work
+  delete sealedConfig.animations; // Won't work
+
+  console.log("Frozen after attempts:", frozenConfig);
+  // Still {theme: "dark", fontSize: 16, animations: true}
+
+  console.log("Sealed after attempts:", sealedConfig);
+  // {theme: "light", fontSize: 16, animations: true}
+
+  console.log("Is frozen?", Object.isFrozen(frozenConfig)); // true
+  console.log("Is sealed?", Object.isSealed(sealedConfig)); // true
+} catch (error) {
+  console.error("Error in strict mode:", error);
 }
 ```
 
-- The insertion order is used
+</details>
+
+### Task 8: Create a Product Catalog
+
+Create a small product catalog system using objects. Include methods for adding products, updating prices, and displaying product information.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+const productCatalog = {
+  products: [],
+
+  addProduct(name, price, category) {
+    const product = {
+      id: this.products.length + 1,
+      name,
+      price,
+      category,
+      dateAdded: new Date().toISOString().split("T")[0],
+    };
+
+    this.products.push(product);
+    return product.id;
+  },
+
+  updatePrice(productId, newPrice) {
+    const product = this.products.find((p) => p.id === productId);
+
+    if (product) {
+      product.price = newPrice;
+      return true;
+    }
+    return false;
+  },
+
+  removeProduct(productId) {
+    const initialLength = this.products.length;
+    this.products = this.products.filter((p) => p.id !== productId);
+    return this.products.length !== initialLength;
+  },
+
+  getProductInfo(productId) {
+    return this.products.find((p) => p.id === productId);
+  },
+
+  listProductsByCategory(category) {
+    return this.products.filter((p) => p.category === category);
+  },
+};
+
+// Using the product catalog
+productCatalog.addProduct("Laptop", 999, "Electronics");
+productCatalog.addProduct("Headphones", 149, "Electronics");
+productCatalog.addProduct("Coffee Mug", 12, "Kitchen");
+
+productCatalog.updatePrice(2, 129);
+console.log(productCatalog.getProductInfo(2));
+// {id: 2, name: "Headphones", price: 129, category: "Electronics", dateAdded: "2023-10-20"}
+
+const electronics = productCatalog.listProductsByCategory("Electronics");
+console.log(electronics.length); // 2
+```
+
+</details>
+
+### Task 9: Convert Between Object Formats
+
+Convert between different object representations using `Object.entries()`, `Object.fromEntries()`, and array methods.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+// Original object
+const studentGrades = {
+  John: 85,
+  Emma: 92,
+  Michael: 78,
+  Sophia: 95,
+  Daniel: 88,
+};
+
+// 1. Convert to array of [name, grade] entries
+const entriesArray = Object.entries(studentGrades);
+console.log(entriesArray);
+// [["John", 85], ["Emma", 92], ["Michael", 78], ["Sophia", 95], ["Daniel", 88]]
+
+// 2. Transform the data (add passing status)
+const entriesWithStatus = entriesArray.map(([name, grade]) => {
+  const status = grade >= 80 ? "Pass" : "Needs Improvement";
+  return [name, { grade, status }];
+});
+console.log(entriesWithStatus);
+// [["John", {grade: 85, status: "Pass"}], ["Emma", {grade: 92, status: "Pass"}], ...]
+
+// 3. Convert back to object
+const enhancedGrades = Object.fromEntries(entriesWithStatus);
+console.log(enhancedGrades);
+/*
+{
+    "John": {grade: 85, status: "Pass"},
+    "Emma": {grade: 92, status: "Pass"},
+    "Michael": {grade: 78, status: "Needs Improvement"},
+    ...
+}
+*/
+
+// 4. Filter only passing students and convert to new object
+const passingStudents = Object.fromEntries(
+  Object.entries(enhancedGrades).filter(([_, data]) => data.status === "Pass")
+);
+console.log(passingStudents);
+// {John: {grade: 85, status: "Pass"}, Emma: {grade: 92, status: "Pass"}, ...}
+```
+
+</details>
+
+### Task 10: Object Methods and "this" Context
+
+Create an object with methods that use "this" to reference the object itself. Demonstrate how "this" behaves when methods are called in different ways.
+
+<details>
+<summary>Solution</summary>
+
+```javascript
+const counter = {
+  count: 0,
+
+  increment() {
+    this.count++;
+    return this.count;
+  },
+
+  decrement() {
+    this.count--;
+    return this.count;
+  },
+
+  reset() {
+    this.count = 0;
+    return this.count;
+  },
+
+  display() {
+    console.log(`Current count: ${this.count}`);
+  },
+};
+
+// Normal method calls - "this" refers to counter object
+counter.increment(); // 1
+counter.increment(); // 2
+counter.display(); // "Current count: 2"
+
+// Storing a method reference and calling it
+const incrementFn = counter.increment;
+// incrementFn();   // Error: this is undefined or window in browser
+
+// Fixing with bind
+const boundIncrement = counter.increment.bind(counter);
+boundIncrement(); // 3
+counter.display(); // "Current count: 3"
+
+// Using call/apply
+const obj = { count: 10 };
+counter.increment.call(obj); // "this" becomes obj
+console.log(obj.count); // 11
+
+// Using arrow functions (which don't have their own "this")
+const counterWithArrow = {
+  count: 0,
+
+  // Regular function uses "this" from the object
+  increment() {
+    this.count++;
+
+    // Arrow function uses "this" from parent scope
+    const display = () => {
+      console.log(this.count); // "this" refers to counterWithArrow
+    };
+
+    display();
+  },
+};
+
+counterWithArrow.increment(); // Logs: 1
+```
+
+</details>
+
+---

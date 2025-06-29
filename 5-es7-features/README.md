@@ -71,6 +71,8 @@ alert(surname); // Anonymous (default used)
 alert(age); // undefined
 ```
 
+---
+
 ## Object destructuring
 
 ```js
@@ -172,6 +174,8 @@ alert(height); // 200
 alert(item1); // Cake
 alert(item2); // Donut
 ```
+
+---
 
 # Modules
 
@@ -461,6 +465,8 @@ let say = obj.default;
 say();
 ```
 
+---
+
 # Rest parameters
 
 - used to create functions that accept `any number of arguments`.
@@ -501,6 +507,8 @@ function f(arg1, ...rest, arg2) { // arg2 after ...rest ?!
   // error
 }
 ```
+
+---
 
 # Spread syntax
 
@@ -566,3 +574,138 @@ alert(JSON.stringify(objCopy)); // {"a":1,"b":2,"c":3}
 
 - When ... is at the `end of function parameters`, it’s “rest parameters” and gathers the rest of the `list of arguments` into an `array`.
 - When ... occurs `in a function call or alike`, it’s called a “spread syntax” and `expands` an array into a `list`.
+
+---
+
+# Most asked interview questions
+
+```js
+const a = [1, 2];
+const b = [...a, 3];
+console.log(b);
+```
+
+**Output:** `[1, 2, 3]`
+**Explanation:** `...a` spreads the values into a new array.
+
+---
+
+```js
+const obj1 = { a: 1 };
+const obj2 = { ...obj1, b: 2 };
+console.log(obj2);
+```
+
+**Output:** `{ a: 1, b: 2 }`
+**Explanation:** Object spread copies properties into a new object.
+
+---
+
+```js
+const obj1 = { a: 1 };
+const obj2 = { a: 2, ...obj1 };
+console.log(obj2);
+```
+
+**Output:** `{ a: 1 }`
+**Explanation:** Later spread properties override earlier ones.
+
+---
+
+```js
+function sum(...nums) {
+  return nums.reduce((a, b) => a + b);
+}
+console.log(sum(1, 2, 3));
+```
+
+**Output:** `6`
+**Explanation:** Rest gathers arguments into an array.
+
+---
+
+```js
+const [a, ...rest] = [1, 2, 3, 4];
+console.log(rest);
+```
+
+**Output:** `[2, 3, 4]`
+**Explanation:** Destructures first element into `a`, rest into `rest`.
+
+---
+
+```js
+const [x, y] = [10, 20];
+console.log(x, y);
+```
+
+**Output:** `10 20`
+**Explanation:** Values are assigned based on position.
+
+---
+
+```js
+const [a, , b] = [1, 2, 3];
+console.log(a, b);
+```
+
+**Output:** `1 3`
+**Explanation:** Comma skips the middle value.
+
+---
+
+```js
+const user = { name: "Shubham", age: 27 };
+const { name } = user;
+console.log(name);
+```
+
+**Output:** `"Shubham"`
+**Explanation:** Destructures property `name` from `user`.
+
+---
+
+```js
+const person = { n: "Shubham" };
+const { n: name } = person;
+console.log(name);
+```
+
+**Output:** `"Shubham"`
+**Explanation:** `n` is renamed to `name`.
+
+---
+
+```js
+const { x = 10 } = {};
+console.log(x);
+```
+
+**Output:** `10`
+**Explanation:** `x` not present in object → fallback to default.
+
+---
+
+```js
+const obj = { a: { b: 2 } };
+const {
+  a: { b },
+} = obj;
+console.log(b);
+```
+
+**Output:** `2`
+**Explanation:** Nested destructuring of `obj.a.b`.
+
+---
+
+```js
+const obj = { a: 1, b: 2, c: 3 };
+const { a, ...rest } = obj;
+console.log(rest);
+```
+
+**Output:** `{ b: 2, c: 3 }`
+**Explanation:** `...rest` gathers remaining properties.
+
+---
